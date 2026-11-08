@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenDepthmap Workstation (OSSE Pro v1.1.0) — Space Syntax CSR Graph Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Workstation Header -->
+  <header id="header">
+    <div class="header-left">
+      <div class="app-brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="6" cy="6" r="3" />
+          <circle cx="18" cy="6" r="3" />
+          <circle cx="12" cy="18" r="3" />
+          <path d="M8.5 7.5L10 16.5" />
+          <path d="M15.5 7.5L14 16.5" />
+          <path d="M9 6h6" />
+        </svg>
+        <span class="app-title">OpenDepthmap</span>
+        <span class="app-badge">CSR v1.1.0</span>
+      </div>
+      <nav class="app-menu">
+        <button class="menu-btn highlight-btn" id="btn-import-geojson" title="Import Universal Street Network (.geojson)">Import .geojson...</button>
+        <button class="menu-btn" id="btn-open-file" title="Open Vector Network File">Open Vector...</button>
+        <button class="menu-btn" id="btn-reset-sample" title="Load Synthetic Urban Grid">Sample Grid</button>
+        <button class="menu-btn" id="btn-export-gpkg" title="Export Analyzed Network as GeoJSON">Export GeoJSON</button>
+        <button class="menu-btn" id="btn-fit-extent" title="Zoom to Network Extent">Fit Extent</button>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="hardware-pill" id="engine-pill">
+        <span class="hw-dot" id="engine-dot"></span>
+        <span class="hw-text" id="engine-badge-header">Engine: Live CSR Backend</span>
+      </div>
+      <button class="action-btn primary" id="btn-run-analysis">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Run Analysis
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workstation Layout -->
+  <main id="workspace">
+    <!-- Left Sidebar: Parameters & Controls -->
+    <aside id="sidebar">
+      <div class="panel-section">
+        <div class="section-title">ANALYSIS ENGINE</div>
+        <div class="form-group">
+          <label for="sel-mode">Solver Mode</label>
+          <select id="sel-mode" class="form-control">
+            <option value="segment" selected>Angular Segment Analysis (ASA CSR)</option>
+            <option value="step_depth">Origin Step Depth (Multi-Source)</option>
+            <option value="axial">Topological Axial Map (Hillier)</option>
+            <option value="natural_roads">Natural Roads (Stroke Concatenation)</option>
+            <option value="vga">Visibility Graph Analysis (VGA)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sel-analysis-type">
+            Analysis Metric
+            <span class="label-hint">DepthmapX Parity</span>
+          </label>
+          <select id="sel-analysis-type" class="form-control">
+            <option value="angular" selected>Angular (Least Angle — Turner 2007)</option>
+            <option value="metric">Metric (Shortest Distance)</option>
+            <option value="topological">Topological (Fewest Turns)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sel-radius-type">Radius Horizon Type</label>
+          <select id="sel-radius-type" class="form-control">
+            <option value="metric" selected>Metric Distance (meters)</option>
+            <option value="angular">Angular Cumulative Turns</option>
+            <option value="topological">Topological Step Count</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sel-weight-mode">Segment Weighting</label>
+          <select id="sel-weight-mode" class="form-control">
+            <option value="unweighted" selected>Unweighted (Uniform = 1.0)</option>
+            <option value="length">Segment Length Weighted</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sel-tulip-bins">Angular Precision Mode</label>
+          <select id="sel-tulip-bins" class="form-control">
+            <option value="0" selected>Exact Continuous Radians (Float64)</option>
+            <option value="1024">Tulip 1024 Bins (UCL depthmapX)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="group-radii">
+          <label for="inp-radii">
+            Radii Suite
+            <span class="label-hint">Customizable</span>
+          </label>
+          <div class="preset-pills">
+            <button class="pill-btn" data-radii="n, 10000, 5000, 2000, 1200, 800, 400">Urban Suite</button>
+            <button class="pill-btn active" data-radii="n, 800, 400">Meso Triad</button>
+            <button class="pill-btn" data-radii="800, 400">Pedestrian</button>
+          </div>
+          <input type="text" id="inp-radii" class="form-control font-mono" value="n, 800, 400" />
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-title">WATERTIGHT CLEANING PIPELINE</div>
+        <div class="form-group">
+          <label for="sel-clean-mode">
+            Cleaning Mode
+            <span class="label-hint">5-Step Raycast</span>
+          </label>
+          <select id="sel-clean-mode" class="form-control">
+            <option value="auto" selected>Auto (Adaptive P90 Gap Raycast)</option>
+            <option value="manual">Manual (Fixed Extend Distance)</option>
+            <option value="none">None (Planarize Only)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="inp-extend-dist">
+            Extend Distance Ceiling (m)
+            <span class="label-hint">15°–165° Guard</span>
+          </label>
+          <input type="number" id="inp-extend-dist" class="form-control font-mono" value="15.0" min="1.0" max="50.0" step="0.5" />
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="chk-snap" checked />
+          <span>Watertight Endpoint Raycast &amp; Lateral Fallback</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="chk-planarize" checked />
+          <span>Planarize Crossings &amp; Prune Stubs (&lt; 0.5m)</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="chk-collinear" checked />
+          <span>Degree-2 Collinear Join (15° Turn Guard)</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="chk-normalized" checked />
+          <span>Include [0–1] Normalized NACH / NAIN</span>
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-title">CARTOGRAPHIC STYLING</div>
+        <div class="form-group">
+          <label for="sel-metric">Active Display Metric</label>
+          <select id="sel-metric" class="form-control">
+            <option value="nach_rn" selected>NACH Rn (Metropolitan Global)</option>
+            <option value="nain_rn">NAIN Rn (Global Integration)</option>
+            <option value="choice_rn">Choice Rn (Global Flow)</option>
+            <option value="integration_rn">Integration Rn (Global Closeness)</option>
+            <option value="mean_depth_rn">Mean Depth Rn (Global)</option>
+            <option value="connectivity">Connectivity (Dual Degree)</option>
+            <option value="angular_connectivity">Angular Connectivity</option>
+            <option value="nach_r800">NACH R800 (Local Choice)</option>
+            <option value="nain_r800">NAIN R800 (Local Integration)</option>
+            <option value="nach_r400">NACH R400 (Pedestrian Micro)</option>
+            <option value="choice_r800">Choice R800 (Local Volume)</option>
+            <option value="nach_norm_rn">NACH Norm Rn [0–1]</option>
+            <option value="nain_norm_rn">NAIN Norm Rn [0–1]</option>
+            <option value="length_m">Segment Length (meters)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sel-palette">Color Palette (DepthmapX Suite)</label>
+          <select id="sel-palette" class="form-control">
+            <option value="swiss" selected>Swiss Cartographic (Publication Standard)</option>
+            <option value="classic_rainbow">DepthmapX Classic Rainbow</option>
+            <option value="inverted_rainbow">DepthmapX Inverted Rainbow</option>
+            <option value="thermal">Thermal / Heatmap</option>
+            <option value="greyscale">Monochrome Greyscale</option>
+            <option value="viridis">Viridis Perceptual</option>
+          </select>
+        </div>
+
+        <!-- Palette Legend Bar -->
+        <div class="legend-container">
+          <div class="legend-bar" id="legend-gradient"></div>
+          <div class="legend-labels">
+            <span id="legend-min">0.00 (Quiet)</span>
+            <span id="legend-mid">0.75</span>
+            <span id="legend-max">1.50 (Super-Spine)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Summary & Live CSR Scorecard -->
+      <div class="panel-section stats-section">
+        <div class="section-title">CSR TELEMETRY &amp; SCORECARD</div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">Segments (Nodes)</span>
+            <span class="stat-val font-mono" id="stat-segments">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">CSR Graph RAM</span>
+            <span class="stat-val font-mono" id="stat-ram">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Solve Time</span>
+            <span class="stat-val font-mono" id="stat-time">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Intelligibility R²</span>
+            <span class="stat-val font-mono" id="stat-r2">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Mean NACH Rn</span>
+            <span class="stat-val font-mono" id="stat-nach-rn">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Mean NAIN Rn</span>
+            <span class="stat-val font-mono" id="stat-nain-rn">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Max Choice Rn</span>
+            <span class="stat-val font-mono" id="stat-choice-rn">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Mean Integ Rn</span>
+            <span class="stat-val font-mono" id="stat-integ-rn">—</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center & Right Workspace -->
+    <div id="center-viewport">
+      <!-- 2D Hardware-Accelerated Vector Canvas -->
+      <div id="canvas-container">
+        <canvas id="map-canvas"></canvas>
+        <div id="canvas-overlay">
+          <div class="nav-controls">
+            <button class="nav-btn" id="btn-zoom-in" title="Zoom In">+</button>
+            <button class="nav-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+            <button class="nav-btn" id="btn-reset-view" title="Reset Extent">⌂</button>
+          </div>
+          <div class="scale-bar" id="scale-bar">
+            <span id="scale-label">500 m</span>
+            <div class="scale-line"></div>
+          </div>
+        </div>
+        <!-- Hover Tooltip -->
+        <div id="tooltip" class="tooltip hidden">
+          <div class="tooltip-header" id="tt-title">Segment #0</div>
+          <div class="tooltip-row"><span>Connectivity:</span> <strong id="tt-conn">—</strong></div>
+          <div class="tooltip-row"><span>NACH Rn:</span> <strong id="tt-nach-rn">—</strong></div>
+          <div class="tooltip-row"><span>NAIN Rn:</span> <strong id="tt-nain-rn">—</strong></div>
+          <div class="tooltip-row"><span>Choice Rn:</span> <strong id="tt-choice-rn">—</strong></div>
+          <div class="tooltip-row"><span>Integration Rn:</span> <strong id="tt-integ-rn">—</strong></div>
+          <div class="tooltip-row"><span>Mean Depth Rn:</span> <strong id="tt-md-rn">—</strong></div>
+          <div class="tooltip-row"><span>NACH R800:</span> <strong id="tt-nach">—</strong></div>
+          <div class="tooltip-row"><span>Length:</span> <strong id="tt-len">—</strong></div>
+        </div>
+      </div>
+
+      <!-- Bottom Collapsible Bivariate Scatter Plot -->
+      <section id="scatter-panel">
+        <div class="scatter-header">
+          <div class="scatter-title">
+            <span>BIVARIATE CORRELATION SCATTER PLOT</span>
+            <span class="r2-badge font-mono" id="scatter-r2">R² = —</span>
+          </div>
+          <div class="scatter-axes-selectors">
+            <label for="sel-scatter-x">X:</label>
+            <select id="sel-scatter-x" class="scatter-select">
+              <option value="integration_rn" selected>Integration Rn (Global)</option>
+              <option value="connectivity">Connectivity (Degree)</option>
+              <option value="nain_rn">NAIN Rn</option>
+              <option value="nach_r800">NACH R800</option>
+              <option value="length_m">Length (m)</option>
+            </select>
+            <label for="sel-scatter-y">Y:</label>
+            <select id="sel-scatter-y" class="scatter-select">
+              <option value="nach_rn" selected>NACH Rn (Global)</option>
+              <option value="nain_rn">NAIN Rn (Global)</option>
+              <option value="choice_rn">Choice Rn (Global)</option>
+              <option value="nach_r800">NACH R800</option>
+              <option value="integration_rn">Integration Rn</option>
+            </select>
+            <button class="scatter-btn" id="btn-toggle-scatter">▼ Minimize</button>
+          </div>
+        </div>
+        <div class="scatter-body">
+          <canvas id="scatter-canvas"></canvas>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Workstation Status Bar -->
+  <footer id="statusbar">
+    <div class="status-left">
+      <span class="status-item" id="status-engine-badge">Engine: <strong>Live CSR Backend</strong></span>
+      <span class="status-sep">|</span>
+      <span class="status-item font-mono" id="status-coords">Metric X: 0.0 m, Y: 0.0 m</span>
+    </div>
+    <div class="status-right">
+      <span class="status-item" id="status-dataset">Source: <strong>Synthetic Superblock Grid</strong></span>
+      <span class="status-sep">|</span>
+      <span class="status-item">Projection: <strong>Metric Planar (Meters)</strong></span>
+    </div>
+  </footer>
+
+  <input type="file" id="file-input" accept=".geojson,.json" style="display: none;" />
+
+  <script src="app.js"></script>
+</body>
+</html>

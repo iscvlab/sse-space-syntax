@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "osse-space-syntax"
+version = "1.1.0"
+description = "SSE — Space Syntax Engine: High-speed Rust/Python topological centrality, Brandes angular/metric segment analysis, and GIS CAD pipeline"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Napat (Tan) Phasundhiae", email = "napattan.ph@gmail.com" }
+]
+maintainers = [
+    { name = "Napat (Tan) Phasundhiae", email = "napattan.ph@gmail.com" }
+]
+keywords = [
+    "space-syntax",
+    "urban-analytics",
+    "network-analysis",
+    "betweenness-centrality",
+    "closeness-centrality",
+    "gis",
+    "qgis",
+    "depthmapx",
+    "spatial-network",
+    "pedestrian-accessibility"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Architecture",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent"
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.22.0",
+    "scipy>=1.9.0",
+    "shapely>=2.0.0",
+    "networkx>=3.0",
+    "pyproj>=3.4.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "flake8>=6.0.0"
+]
+spatial = [
+    "geopandas>=0.14.0",
+    "matplotlib>=3.6.0"
+]
+
+[project.scripts]
+osse = "osse.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/napattan/sse-space-syntax"
+Documentation = "https://github.com/napattan/sse-space-syntax#readme"
+Repository = "https://github.com/napattan/sse-space-syntax.git"
+Issues = "https://github.com/napattan/sse-space-syntax/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["osse*"]
+exclude = ["tests*", "examples*", "docs*"]
