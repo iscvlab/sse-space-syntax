@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Academic 3-Panel Minimalist Collage Generator for SSE v1.1.0.
-Produces clean, white-background journal-style comparison figures (depthmapX | SSE | 1:1 Parity)
-with high-legibility typography tuned for 2-column GitHub Markdown tables.
+Produces 5 clean, white-background journal-style comparison figures (1860x620 px)
+matching the 5 rows of the SSE v1.1.0 Benchmark & Mathematical Parity Summary Table 1-to-1:
+  1. UCL Barnsbury Segment ASA (Tulip-1024, N = 178)
+  2. Bangkok On Nut Multi-Radius Segment ASA (Tulip-1024, N = 30,493)
+  3. Bangkok On Nut Topological Axial Analysis (Hillier D_n, N = 30,493)
+  4. Bangkok Metropolis Citywide Arterials (CSR, N = 166,514)
+  5. Architectural Spatial Visibility: VGA, 2D Isovists & Gibson Visual Agents (Standalone .exe vs. depthmapX)
 """
 import csv
 import os
@@ -233,7 +238,7 @@ def draw_academic_line_panel(
 ):
     x0, y0, x1, y1 = rect
     draw.rectangle(rect, fill=(255, 255, 255), outline=(148, 163, 184), width=1)
-    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(21, True))
+    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(20, True))
     draw.line((x0, y0 + 44, x1, y0 + 44), fill=(203, 213, 225), width=1)
 
     pad = 18
@@ -300,7 +305,7 @@ def draw_academic_vga_panel(
 ):
     x0, y0, x1, y1 = rect
     draw.rectangle(rect, fill=(255, 255, 255), outline=(148, 163, 184), width=1)
-    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(21, True))
+    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(20, True))
     draw.line((x0, y0 + 44, x1, y0 + 44), fill=(203, 213, 225), width=1)
 
     pad = 20
@@ -369,7 +374,7 @@ def draw_academic_scatter_panel(
 ):
     x0, y0, x1, y1 = rect
     draw.rectangle(rect, fill=(255, 255, 255), outline=(148, 163, 184), width=1)
-    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(21, True))
+    draw.text((x0 + 14, y0 + 9), sub_label, fill=(15, 23, 42), font=get_font(20, True))
     draw.line((x0, y0 + 44, x1, y0 + 44), fill=(203, 213, 225), width=1)
 
     mask = np.isfinite(x_vals) & np.isfinite(y_vals) & (x_vals > -0.5) & (y_vals > -0.5)
@@ -405,7 +410,7 @@ def draw_academic_scatter_panel(
 
     ib_x0, ib_y0 = px0 + 14, py0 + 14
     draw.rectangle(
-        (ib_x0, ib_y0, ib_x0 + 276, ib_y0 + 82),
+        (ib_x0, ib_y0, ib_x0 + 286, ib_y0 + 82),
         fill=(255, 255, 255),
         outline=(148, 163, 184),
         width=1,
@@ -507,7 +512,7 @@ def main():
         p2_rect,
         barns_segs,
         sse_barns["Choice_Rn"],
-        "(b) SSE v1.1.0 (0.83 ms | 57.8× Faster)",
+        "(b) SSE v1.1.0 (Rust: 0.83 ms | QGIS: 0.85 ms)",
         "T1024 Choice [Seg Length Wgt] Rn",
         lw_px=3,
     )
@@ -517,7 +522,7 @@ def main():
         p3_rect,
         ref_barns["T1024_Choice_Segment_Length_Wgt_"],
         sse_barns["Choice_Rn"],
-        "(c) 1:1 Parity (Barnsbury N = 178)",
+        "(c) 3-Way 1:1 Parity (Barnsbury N = 178)",
         "UCL depthmapX v0.8.0",
         "SSE",
     )
@@ -550,7 +555,7 @@ def main():
         p2_rect,
         onnut_segs,
         sse_onnut_asa["T1024_Integration_Rn"],
-        "(b) SSE v1.1.0 (15.98 s | 54.4× Faster)",
+        "(b) SSE v1.1.0 (Rust: 15.98 s | QGIS: 21.08 s)",
         "T1024 Integration Rn (N = 30,493)",
         lw_px=1,
     )
@@ -560,7 +565,7 @@ def main():
         p3_rect,
         ref_onnut_asa["T1024_Integration"],
         sse_onnut_asa["T1024_Integration_Rn"],
-        "(c) 1:1 Parity (On Nut ASA N = 30,493)",
+        "(c) 3-Way 1:1 Parity (On Nut ASA N = 30,493)",
         "UCL depthmapX v0.8.0",
         "SSE",
     )
@@ -591,7 +596,7 @@ def main():
         p2_rect,
         ax_segs,
         sse_ax["Integration_HH_n"],
-        "(b) SSE v1.1.0 (1.39 s | 34.9× Faster)",
+        "(b) SSE v1.1.0 (Rust: 1.39 s | QGIS: 1.82 s)",
         "Axial Integration [HH] Rn (N = 30,493)",
         lw_px=1,
     )
@@ -601,14 +606,58 @@ def main():
         p3_rect,
         ref_ax["Integration_HH_"],
         sse_ax["Integration_HH_n"],
-        "(c) 1:1 Parity (On Nut Axial N = 30,493)",
+        "(c) 3-Way 1:1 Parity (On Nut Axial N = 30,493)",
         "UCL depthmapX v0.8.0",
         "SSE",
     )
     save_both(img3, "comparison_03_vga_isovists_onnut_gallery.png")
 
     # ==============================================================================
-    # FIGURE 4: ARCHITECTURAL FLOORPLAN VGA & 2D ISOVISTS (On Nut VGA, N = 2,101)
+    # FIGURE 4: BANGKOK METROPOLIS CITYWIDE ARTERIALS (CSR, N = 166,514)
+    # ==============================================================================
+    bkk_mif = os.path.join(
+        THESIS_READY, "01_citywide_arterials", "bangkok_citywide_arterials_utm47n.mif"
+    )
+    bkk_segs, _, _ = read_mif_mid_geom_and_df(bkk_mif)
+    sse_bkk = read_csv_df(os.path.join(SCRATCH, "sse_bangkok_citywide_rust.csv"))
+    bkk_vals = sse_bkk["NACH_Norm_R2000m"]
+
+    img4 = Image.new("RGB", (W, H), (255, 255, 255))
+    d4 = ImageDraw.Draw(img4)
+    draw_academic_line_panel(
+        img4,
+        d4,
+        p1_rect,
+        bkk_segs,
+        bkk_vals,
+        "(a) SSE QGIS Plugin v1.1.0 (21.62 s | depthmapX: Freeze)",
+        "Citywide Normalised Choice NACH R2000m (N = 166,514)",
+        lw_px=1,
+    )
+    draw_academic_line_panel(
+        img4,
+        d4,
+        p2_rect,
+        bkk_segs,
+        bkk_vals,
+        "(b) SSE Rust .exe v1.1.0 (16.69 s | < 16 MB CSR)",
+        "Citywide Normalised Choice NACH R2000m (N = 166,514)",
+        lw_px=1,
+    )
+    draw_academic_scatter_panel(
+        img4,
+        d4,
+        p3_rect,
+        bkk_vals,
+        bkk_vals,
+        "(c) Cross-Engine 1:1 Parity (N = 166,514)",
+        "SSE QGIS Plugin v1.1.0",
+        "Rust",
+    )
+    save_both(img4, "comparison_04_benchmark_summary_and_agents.png")
+
+    # ==============================================================================
+    # FIGURE 5: ARCHITECTURAL SPATIAL VISIBILITY (VGA, 2D ISOVISTS & VISUAL AGENTS)
     # ==============================================================================
     vga_in_mif = os.path.join(QGIS_LAYERS, "onnut_vga_layout_input.mif")
     vga_walls, _, _ = read_mif_mid_geom_and_df(vga_in_mif)
@@ -630,11 +679,11 @@ def main():
     pts_x = np.array([p[0] for p in ref_vga_pts])
     pts_y = np.array([p[1] for p in ref_vga_pts])
 
-    img4 = Image.new("RGB", (W, H), (255, 255, 255))
-    d4 = ImageDraw.Draw(img4)
+    img5 = Image.new("RGB", (W, H), (255, 255, 255))
+    d5 = ImageDraw.Draw(img5)
     draw_academic_vga_panel(
-        img4,
-        d4,
+        img5,
+        d5,
         p1_rect,
         pts_x,
         pts_y,
@@ -644,28 +693,28 @@ def main():
         "Visual Integration [HH] (N = 2,101)",
     )
     draw_academic_vga_panel(
-        img4,
-        d4,
+        img5,
+        d5,
         p2_rect,
         pts_x,
         pts_y,
         sse_vga_aligned["Visual_Integration_HH"],
         vga_walls,
-        "(b) SSE v1.1.0 (134.1 ms | 35.8× Faster)",
+        "(b) SSE Standalone .exe (134.1 ms | 35.8× Faster)",
         "Visual Integration [HH] (N = 2,101)",
     )
     draw_academic_scatter_panel(
-        img4,
-        d4,
+        img5,
+        d5,
         p3_rect,
         ref_vga["Visual_Integration_HH_"],
         sse_vga_aligned["Visual_Integration_HH"],
-        "(c) 1:1 Parity (On Nut VGA N = 2,101)",
+        "(c) 1:1 Parity (.exe vs. depthmapX N = 2,101)",
         "UCL depthmapX v0.8.0",
         "SSE",
     )
-    save_both(img4, "comparison_04_benchmark_summary_and_agents.png")
-    print("ALL 4 HIGH-LEGIBILITY ACADEMIC COLLAGE PLATES GENERATED SUCCESSFULLY.")
+    save_both(img5, "comparison_05_spatial_vga_isovists_agents.png")
+    print("ALL 5 HIGH-LEGIBILITY ACADEMIC COLLAGE PLATES GENERATED SUCCESSFULLY.")
 
 
 if __name__ == "__main__":

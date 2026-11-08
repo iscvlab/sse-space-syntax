@@ -21,7 +21,6 @@ from .algorithms.algorithm_natural_roads import (  # noqa: E402
 from .algorithms.algorithm_prepare_osm import (  # noqa: E402
     SSEPrepareOSMAlgorithm
 )
-from .algorithms.algorithm_vga import SSEVGAAlgorithm  # noqa: E402
 from .algorithms.algorithm_step_depth import (  # noqa: E402
     SSEStepDepthAlgorithm
 )
@@ -34,7 +33,6 @@ class SSEProvider(QgsProcessingProvider):
         self.addAlgorithm(SSEAxialAlgorithm())
         self.addAlgorithm(SSENaturalRoadsAlgorithm())
         self.addAlgorithm(SSEPrepareOSMAlgorithm())
-        self.addAlgorithm(SSEVGAAlgorithm())
 
     def id(self, *args, **kwargs):
         return "sse"

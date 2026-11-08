@@ -9,7 +9,7 @@
 [![Lab](https://img.shields.io/badge/Lab-ISCV_%7C_Isocurve_Research_Lab_%28%40iscvlab%29-121417?style=flat-square&logo=github&logoColor=white)](https://github.com/iscvlab)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4f46e5?style=flat-square)](LICENSE)
 
-**SSE — Space Syntax Engine (`v1.1.0`)** is an open-source, dual-engine (**Native Rust + Python/QGIS**) computational platform for urban street network and architectural visibility analysis. Built as a high-performance replacement for legacy UCL `depthmapX v0.8.0`, SSE achieves **100% mathematical parity (`R² = 1.0000`)** at **35×–58× faster multi-core speed** across a standalone desktop workstation (`sse-desktop.exe`), a **QGIS 3.22–4.x (`Qt6 Ready`) Processing Plugin**, a batch CLI (`sse-cli.exe`), and an AI Model Context Protocol server (`sse-mcp.exe`).
+**SSE — Space Syntax Engine (`v1.1.0`)** is an open-source, dual-engine (**Native Rust + Python/QGIS**) computational platform for urban street network and architectural visibility analysis. Built as a high-performance replacement for legacy UCL `depthmapX v0.8.0`, SSE achieves **100% mathematical parity (`R² = 1.0000`)** at **35×–58× faster multi-core speed** across a standalone desktop workstation (`sse-desktop.exe`), a **QGIS 3.22–4.x (`Qt6 Ready`) Street Network Processing Plugin**, a batch CLI (`sse-cli.exe`), and an AI Model Context Protocol server (`sse-mcp.exe`).
 
 ---
 
@@ -18,7 +18,7 @@
 - **Exact `UCL depthmapX` Mathematical Parity (`R² = 1.0000`)**: Replicates official `depthmapX v0.8.0` outputs across Angular Segment Analysis (`Tulip-1024`), Topological Axial Analysis, Visibility Graph Analysis (`VGA`), 2D Benedikt Isovists, and Gibson Visual Agents.
 - **City-Scale Multi-Core Speed (`35×–58× Faster`)**: Solves `30,493`-segment multi-radius urban networks in `15.98 s` (vs. `14.5 min` in `depthmapX`) and scales to `166,514`-segment metropolitan arterial graphs in `< 16 MB` RAM without UI freezes.
 - **Automated 5-Step OpenStreetMap Network Cleaner**: Heals raw digitizing gaps, preserves bridge/tunnel grade separation, and prunes dead-end micro-stubs prior to spatial graph construction.
-- **Unified Multi-Platform Ecosystem**: Ships as a zero-dependency standalone GUI (`sse-desktop.exe`), a 6-algorithm QGIS Processing suite (`sse:*`), a Python library (`osse`), a Grasshopper C# component, and a 9-tool AI agent MCP server (`sse-mcp.exe`).
+- **Focused Dual-Engine Ecosystem**: Ships a **5-algorithm QGIS Street Network Processing suite** (`sse:*` — `26.6×–56.5×` faster than `depthmapX`) alongside a zero-dependency **Standalone Rust Workstation (`sse-desktop.exe`)** covering both citywide street networks and architectural `VGA / 2D Isovists / 60 FPS Visual Agents`.
 
 ### Horizontal Bar Comparison (`0 ms` Render)
 
@@ -26,7 +26,7 @@
 | :--- | :--- | :--- | :--- |
 | **1. Mathematical Parity vs. `UCL depthmapX v0.8.0` ↑** | **SSE v1.1.0 (`Rust .exe` & `QGIS Plugin`)**<br>Undirected Graph Approximation | `████████████████████` **`100.0% Exact (R² = 1.0000)`**<br>`███████████████████░` `99.6% (R² = 0.9962)` | **`max\|Δ\| = 0.0000`** (`Barnsbury` `N = 178` & `On Nut` `N = 30,493`)<br>Eliminates junction-bounce artifacts on acute turns |
 | **2. Multi-Radius Segment ASA Latency (`N = 30,493`) ↓**<br>*(Lower = Better)* | **SSE v1.1.0 (`Standalone Rust .exe`)**<br>**SSE v1.1.0 (`QGIS Plugin` All-Pairs / Fast)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`15.98 s`**<br>`█░░░░░░░░░░░░░░░░░░░` **`21.08 s (1.86 s Fast)`**<br>`████████████████████` `870.00 s (14.5 min)` | **`54.4× Faster`** (`R800, R1200, R2000, Rn`)<br>**`41.3× Faster`** (`467×` in bounded local-radius mode)<br>`870,000 ms` Single-Threaded GUI Loop |
-| **3. Urban Axial & Floorplan VGA Latency ↓**<br>*(Lower = Better)* | **SSE v1.1.0 (`Rust .exe` Axial / VGA)**<br>**SSE v1.1.0 (`QGIS Plugin` Axial / VGA)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`1.39 s Axial · 134 ms VGA`**<br>`█░░░░░░░░░░░░░░░░░░░` **`1.82 s Axial · 574 ms VGA`**<br>`████████████████████` `48.50 s Axial · 4,800 ms VGA` | **`34.9×–35.8× Faster`** (`30,493` axial lines & `2,101` VGA cells)<br>**`26.6× Faster`** across `16` Hillier & Hanson axial metrics<br>`48,500 ms` Axial / `4,800 ms` VGA Baseline |
+| **3. Urban Axial & Floorplan VGA Latency ↓**<br>*(Lower = Better)* | **SSE v1.1.0 (`Rust .exe` Axial / VGA)**<br>**SSE v1.1.0 (`QGIS Plugin` Axial)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`1.39 s Axial · 134 ms VGA`**<br>`█░░░░░░░░░░░░░░░░░░░` **`1.82 s Axial`**<br>`████████████████████` `48.50 s Axial · 4,800 ms VGA` | **`34.9×–35.8× Faster`** (`30,493` axial lines & `2,101` VGA cells)<br>**`26.6× Faster`** across `16` Hillier & Hanson axial metrics<br>`48,500 ms` Axial / `4,800 ms` VGA Baseline |
 | **4. Metropolis Capacity (`Bangkok`, `N = 166,514`) ↑** | **SSE v1.1.0 (`Rust .exe` & `QGIS Plugin`)**<br>UCL depthmapX v0.8.0 C++ Baseline | `████████████████████` **`100.0% Solved (16.69 s)`**<br>`░░░░░░░░░░░░░░░░░░░░` `0.0% (DNF / Freeze)` | **`< 16 MB` CSR RAM** (`16.69 s` Rust · `21.62 s` QGIS, `R² = 1.0000`)<br>`> 13.8B` `O(N²)` pairs (Application freeze) |
 
 ---
@@ -41,42 +41,44 @@
 | :---: |
 | ![On Nut ASA Parity](docs/benchmarks/comparison_02_axial_onnut_30493.png) |
 
-| **3. `Bangkok On Nut` Topological Axial Analysis (`Hillier D_n` · `N = 30,493` · `R² = 1.000000` · `34.9×` Faster)** |
+| **3. `Bangkok On Nut` Topological Axial Analysis (`16` Hillier Metrics · `N = 30,493` · `R² = 1.000000` · `34.9×` Faster)** |
 | :---: |
 | ![On Nut Axial Parity](docs/benchmarks/comparison_03_vga_isovists_onnut_gallery.png) |
 
-| **4. `On Nut` Architectural Floorplan VGA & 2D Isovists (`N = 2,101` · `1.04M` Edges · `R² = 1.000000` · `35.8×` Faster)** |
+| **4. `Bangkok Metropolis` Citywide Arterials (`Tulip-1024` CSR · `N = 166,514` · `R² = 1.000000` · `< 16 MB` RAM)** |
 | :---: |
-| ![On Nut VGA Parity](docs/benchmarks/comparison_04_benchmark_summary_and_agents.png) |
+| ![Bangkok Citywide Arterials Parity](docs/benchmarks/comparison_04_benchmark_summary_and_agents.png) |
+
+| **5. `Architectural Spatial Visibility` (`VGA + 2D Isovists + Gibson Visual Agents` · `N = 2,101` · `R² = 1.000000` · `35.8×` Faster · `Standalone .exe` Only)** |
+| :---: |
+| ![Architectural Spatial Visibility Parity](docs/benchmarks/comparison_05_spatial_vga_isovists_agents.png) |
 
 ### 3-Way Execution Speed & Mathematical Parity Summary
 
 | Benchmark Suite & Empirical Dataset | Scale (`N`) | `UCL depthmapX v0.8.0` | `SSE QGIS Plugin v1.1.0` | `SSE Rust .exe v1.1.0` | Speedup (`QGIS / Rust`) | Parity (`R²` & `max\|Δ\|`) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
 | **1. UCL Barnsbury Segment ASA (`Tulip-1024`)** | `178` segs (`R400 + Rn`) | `48.00 ms` | **`0.85 ms`** | **`0.83 ms`** | **`56.5×` / `57.8×`** | **`R² = 1.000000`** (`0.0000`) |
-| **2. UCL Barnsbury Axial DXF (`barnsbury.dxf`)** | `1,100` lines (`n, R3`) | `320.00 ms` | **`8.13 ms`** | **`5.14 ms`** | **`39.4×` / `62.3×`** | **`R² = 1.000000`** (`0.0000`) |
-| **3. UCL National Gallery VGA + Isovists + Agents** | `1,866` cells (`gallery.dxf`) | `5,200.0 ms` | **`1,623.89 ms`** | **`122.92 ms`** | **`3.2×` / `42.3×`** | **`R² = 1.000000`** (`0.0000`) |
-| **4. On Nut Floorplan VGA + 2D Isovists** | `2,101` cells (`1.04M` edges) | `4,800.0 ms` | **`573.86 ms`** | **`134.14 ms`** | **`8.4×` / `35.8×`** | **`R² = 1.000000`** (`0.0001`) |
-| **5. On Nut Urban Axial Network (`16` Metrics)** | `30,493` lines (`Rn, R3, R5`) | `48.50 s` | **`1.82 s`** | **`1.39 s`** | **`26.6×` / `34.9×`** | **`R² = 1.000000`** (`0.0000`) |
-| **6. On Nut Multi-Radius Segment ASA (`Tulip-1024`)** | `30,493` segs (`R800..Rn`) | `870.00 s` | **`21.08 s`** (`1.86 s` Fast) | **`15.98 s`** | **`41.3×` / `54.4×`** | **`R² = 1.000000`** (`0.0000`) |
-| **7. Bangkok Citywide Arterials ASA (`CSR`)** | `166,514` segs (`R800..Rn`) | `DNF / Freeze` | **`21.62 s`** | **`16.69 s`** | **`1.29×` (`Rust/QGIS`)** | **`R² = 1.000000`** (`< 16 MB`) |
+| **2. Bangkok On Nut Multi-Radius ASA (`Tulip-1024`)** | `30,493` segs (`R800..Rn`) | `870.00 s` | **`21.08 s`** (`1.86 s` Fast) | **`15.98 s`** | **`41.3×` / `54.4×`** | **`R² = 1.000000`** (`0.0000`) |
+| **3. Bangkok On Nut Topological Axial (`16` Metrics)** | `30,493` lines (`Rn, R3, R5`) | `48.50 s` | **`1.82 s`** | **`1.39 s`** | **`26.6×` / `34.9×`** | **`R² = 1.000000`** (`0.0000`) |
+| **4. Bangkok Metropolis Citywide Arterials (`CSR`)** | `166,514` segs (`R800..Rn`) | `DNF / Freeze` | **`21.62 s`** (`6.12 s` R2k) | **`16.69 s`** (`4.49 s` R2k) | **`1.29×` (`Rust/QGIS`)** | **`R² = 1.000000`** (`< 16 MB`) |
+| **5. Architectural Spatial Visibility (`VGA + Isovists + Agents`)** | `2,101` cells (`1.04M` edges) | `4,800.0 ms` | *`N/A (Street Network Only)`* | **`134.14 ms`** | **`35.8×` (`Rust .exe`)** | **`R² = 1.000000`** (`0.0001`) |
 
 ---
 
 ## 1. Architecture & Core Modules
 
-SSE (`v1.1.0`) provides identical Space Syntax formulations across two synchronized engines:
-1. **Standalone Native Rust Workstation (`sse-desktop.exe`), CLI (`sse-cli.exe`) & MCP Server (`sse-mcp.exe`)**: Zero-dependency desktop GUI, batch solver, and 9-tool JSON-RPC `2.0` MCP server for AI agents.
-2. **QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Plugin (`dist/sse_v1.1.0.zip`), Python API (`osse`) & Grasshopper C# Component**: Native GIS/CAD toolbox integration with automated symbology, scatter plots (`Intelligibility R²` & `Synergy R²`), and DXF/MIF/GeoPackage I/O.
+SSE (`v1.1.0`) provides identical Space Syntax formulations across two purpose-built engines:
+1. **QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Plugin (`dist/sse_v1.1.0.zip`), Python API (`osse`) & Grasshopper C# Component**: Focused 100% on **5 GIS Street Network Algorithms** (`26.6×–56.5×` faster than `depthmapX`), featuring automated symbology, interactive scatter plots (`Intelligibility R²` & `Synergy R²`), and GeoPackage/GeoJSON/DXF/MIF I/O.
+2. **Standalone Native Rust Workstation (`sse-desktop.exe`), CLI (`sse-cli.exe`) & MCP Server (`sse-mcp.exe`)**: Zero-dependency desktop GUI, batch solver, and 9-tool JSON-RPC `2.0` MCP server covering all 5 street network algorithms **plus** high-speed **Architectural Spatial Visibility (`VGA`, `2D Benedikt Isovists`, and `60 FPS Gibson Visual Agents`)**.
 
-| Analysis Module | CLI / QGIS Algorithm ID (`sse:*`) | Target Input | Primary Outputs |
+| Analysis Module | Engine Availability & ID (`sse:*`) | Target Input | Primary Outputs |
 | :--- | :--- | :--- | :--- |
-| **1. OSM Watertight Cleaner** | `sse:clean_street_network` (`sse:prepare_osm_network`) | Raw OSM / CAD centerlines | Watertight, grade-separated network + stub pruning |
-| **2. Angular Segment (ASA)** | `sse:angular_segment_analysis` | Segment network (`angular`/`metric`/`topo`) | Multi-radius `NACH`, `NAIN`, `Choice`, `Integration` & `R²` |
-| **3. Origin Step Depth** | `sse:origin_step_depth` | Street network + origin points/lines | Angular, metric (`m`), and topological step depth |
-| **4. Topological Axial** | `sse:axial_analysis` | Axial lines (`n, R3, R5`) | `16` Hillier & Hanson metrics (`Integration [HH]`, `RRA`, `Entropy`) |
-| **5. Natural Roads** | `sse:natural_roads` (`sse:natural_roads_strokes`) | Street segments (`max_deflection=20°`) | Gestalt continuity arterial strokes (`sinuosity` & `circuity`) |
-| **6. VGA, Isovists & Agents** | `sse:vga_isovist` (`sse:visibility_graph_analysis`) | Architectural / plaza plans | `Visual_Integration [HH]`, `2D Isovist_Area`, `Gate_Counts` |
+| **1. OSM Watertight Cleaner** | `QGIS Plugin` (`sse:prepare_osm_network`) + `Rust .exe` | Raw OSM / CAD centerlines | Watertight, grade-separated network + stub pruning |
+| **2. Angular Segment (ASA)** | `QGIS Plugin` (`sse:angular_segment_analysis`) + `Rust .exe` | Segment network (`angular`/`metric`/`topo`) | Multi-radius `NACH`, `NAIN`, `Choice`, `Integration` & `R²` |
+| **3. Origin Step Depth** | `QGIS Plugin` (`sse:origin_step_depth`) + `Rust .exe` | Street network + origin points/lines | Angular, metric (`m`), and topological step depth |
+| **4. Topological Axial** | `QGIS Plugin` (`sse:axial_analysis`) + `Rust .exe` | Axial lines (`n, R3, R5`) | `16` Hillier & Hanson metrics (`Integration [HH]`, `RRA`, `Entropy`) |
+| **5. Natural Roads** | `QGIS Plugin` (`sse:natural_roads`) + `Rust .exe` | Street segments (`max_deflection=20°`) | Gestalt continuity arterial strokes (`sinuosity` & `circuity`) |
+| **6. Spatial Visibility (`VGA / Isovists / Agents`)** | **Standalone `Rust .exe` / `CLI` / `MCP` Only** | Architectural floorplans & plazas (`DXF`/`MIF`) | `Visual_Integration [HH]`, `2D Isovist_Area`, `60 FPS Agent Gate_Counts` |
 
 ### Diagram A: SSE Core Engine & Multi-Platform Ecosystem
 
@@ -84,13 +86,13 @@ SSE (`v1.1.0`) provides identical Space Syntax formulations across two synchroni
 %%{init: {'theme': 'neutral'}}%%
 flowchart LR
     subgraph Canvas [" "]
-        In["Raw GIS / CAD Network (GeoJSON / GPKG / DXF / MIF)"] --> Heal["P90 Raycast + Grade Separation + Stub Prune"]
+        In["Raw GIS / CAD Input (GeoJSON / GPKG / DXF / MIF)"] --> Heal["P90 Raycast + Grade Separation + Stub Prune"]
         Heal --> Dual{"Angular Dual Graph + CSR Solver"}
 
         subgraph Platforms ["Host Integrations and Interfaces"]
-            P0["Native Rust Workstation + CLI: sse-desktop.exe / sse-cli.exe (Active)"]
+            P0["Native Rust Workstation + CLI: sse-desktop.exe / sse-cli.exe (Network + Spatial VGA)"]
             P1["Python API + CLI: osse clean / solve (Active)"]
-            P2["QGIS 3.22-4.x Processing Toolbox: 6 sse:* Algos (Active)"]
+            P2["QGIS 3.22-4.x Processing Toolbox: 5 Street Network Algos (Active)"]
             P3["Grasshopper C# Parallel.For Component (Active)"]
         end
 
@@ -99,7 +101,7 @@ flowchart LR
         Dual --> P2
         Dual --> P3
 
-        P0 --> Out["NACH / NAIN / Axial / VGA / Isovists / Agents / R2"]
+        P0 --> Out["NACH / NAIN / Axial / Strokes / VGA / Isovists / Agents / R2"]
         P1 --> Out
         P2 --> Out
         P3 --> Out
@@ -164,10 +166,10 @@ cargo run --release --bin sse-cli -- benchmark
 cargo run --release --bin sse-mcp
 ```
 
-### B. QGIS 3.22–4.x (`Qt6 Ready`) Plugin Installation
+### B. QGIS 3.22–4.x (`Qt6 Ready`) Street Network Plugin Installation
 1. Download **[`sse_v1.1.0.zip`](https://github.com/napattan/sse-space-syntax/releases/download/v1.1.0/sse_v1.1.0.zip)** from GitHub Releases (or install via the QGIS Plugin Manager).
 2. In QGIS, open **Plugins → Manage and Install Plugins → Install from ZIP**, select `sse_v1.1.0.zip`, and click **Install Plugin**.
-3. Access the toolbar buttons (**5-Step Network Cleaner**, **Intelligibility/Synergy Scatter Plot**) and all 6 algorithms under **Processing Toolbox → SSE — Space Syntax Engine**.
+3. Access the toolbar buttons (**5-Step Network Cleaner**, **Intelligibility/Synergy Scatter Plot**) and all 5 street network algorithms under **Processing Toolbox → SSE — Space Syntax Engine**.
 
 ### C. Python Package & CLI (`osse`)
 
@@ -203,14 +205,14 @@ sse-space-syntax/
 │   │   └── sse_mcp.rs            # 9-tool JSON-RPC 2.0 stdio MCP server + 127.0.0.1:9884 GUI TCP controller
 │   └── lib.rs                    # Rust CSR solvers (ASA, Axial, Strokes, VGA, Isovist, Agents)
 ├── osse/
-│   ├── core/                     # Python CSRDualGraph, Numba Tulip-1024, Axial, VGA, Cleaner
+│   ├── core/                     # Python CSRDualGraph, Numba Tulip-1024, Axial, Strokes, Cleaner
 │   ├── io_handlers/              # GeoJSON, GeoPackage, AutoCAD AC1018 DXF & MapInfo MIF/MID I/O
 │   ├── plugins/
-│   │   ├── qgis_plugin/          # QGIS 3.22-4.x (Qt6 Ready) plugin (6 sse:* algorithms)
+│   │   ├── qgis_plugin/          # QGIS 3.22-4.x (Qt6 Ready) plugin (5 street network algorithms)
 │   │   └── grasshopper_csharp/   # RhinoCommon C# Parallel.For solver component
 │   └── cli.py                    # Python CLI entry point (`osse`)
 ├── docs/
-│   ├── benchmarks/               # 3-Way academic comparison plates (depthmapX vs. SSE)
+│   ├── benchmarks/               # 5 Academic 3-Panel Comparison Plates (depthmapX vs. SSE)
 │   ├── RESEARCH_SPACE_SYNTAX_ENGINE.md # Deep mathematical study & forensic parity matrix
 │   └── PUBLISHING_GUIDE.md       # Release & deployment guide
 ├── examples/                     # UCL Barnsbury, Gallery & Multi-Room reference datasets

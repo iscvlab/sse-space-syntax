@@ -69,7 +69,7 @@ flowchart LR
     style Solvers fill:#f8fafc,stroke:#94a3b8,color:#0f172a
 ```
 
-### Universal Network Edition (`v1.1.0`) — 6 QGIS Processing Toolbox Algorithms
+### Universal Network Edition (`v1.1.0`) — 5 QGIS Street Network Processing Algorithms
 
 | # | QGIS Processing Algorithm ID | Mathematical Solver & Parity Scope | Key Output Deliverables |
 | :---: | :--- | :--- | :--- |
@@ -77,8 +77,9 @@ flowchart LR
 | **2** | `sse:angular_segment_analysis` | Multi-Mode ASA (`Angular`/`Metric`/`Topo` × `Metric`/`Angular`/`Topo` Radii × `Length`/`Unweighted`/`Custom` Weighting + `Tulip-1024`) | `NACH`, `NAIN`, `Choice`, `MD`, `Connectivity`, Detailed CSV & `Intelligibility / Synergy R²` |
 | **3** | `sse:origin_step_depth` | Multi-Source Dijkstra Accessibility from Origin Layer or Segment IDs (`Continuous` or `Tulip-1024`) | `angular_step_depth`, `metric_step_depth_m`, `topo_step_depth`, `nearest_origin_id` + CSV |
 | **4** | `sse:axial_analysis` | Hillier & Hanson (1984) Topological Axial BFS (`D_n`, `RA`, `RRA`, `Integration [HH / Tekl]`, `Entropy`) | Axial centrality layer + optional Detailed Attribute CSV |
-| **5** | `sse:natural_roads_strokes` | Jiang & Claramunt (2004) Gestalt Good Continuity Stroke Concatenation (`θ ≤ θ_max`) | Continuous arterial stroke polylines (`stroke_id`, `length_m`) |
-| **6** | `sse:visibility_graph_analysis` | Turner et al. (2001) Visibility Graph Analysis (`VGA`) & Benedikt (1979) Analytical Corner-Ray 2D Isovists | `Isovist_Area`, `Drift`, `Visual_Integration`, `Clustering` + CSV |
+| **5** | `sse:natural_roads` | Jiang & Claramunt (2004) Gestalt Good Continuity Stroke Concatenation (`θ ≤ θ_max`) | Continuous arterial stroke polylines (`stroke_id`, `length_m`) |
+
+> **Note on Architectural Spatial Visibility (`VGA`, `2D Benedikt Isovists`, `60 FPS Gibson Visual Agents`)**: High-density visibility graph and interactive agent simulations are provided natively in the **Standalone Rust Workstation (`sse-desktop.exe`)**, **Batch CLI (`sse-cli.exe`)**, **MCP Server (`sse-mcp.exe`)**, and Python API (`osse.core.solvers_vga` / `osse.core.solvers_agents`).
 
 ---
 
@@ -274,7 +275,8 @@ In [`src/graph.rs`](../src/graph.rs) and [`src/solvers_asa.rs`](../src/solvers_a
 - [`docs/benchmarks/comparison_01_asa_tulip1024_barnsbury_onnut.png`](benchmarks/comparison_01_asa_tulip1024_barnsbury_onnut.png) — 3-panel academic collage (`(a)` `depthmapX` | `(b)` `SSE v1.1.0` | `(c)` `1:1 Parity`) on UCL Barnsbury Segment ASA (`Tulip-1024`, `N = 178`, `R² = 1.000000`, `57.8×` faster).
 - [`docs/benchmarks/comparison_02_axial_onnut_30493.png`](benchmarks/comparison_02_axial_onnut_30493.png) — 3-panel academic collage on Bangkok On Nut Multi-Radius Segment ASA (`Tulip-1024`, `N = 30,493`, `R² = 1.000000`, `54.4×` faster).
 - [`docs/benchmarks/comparison_03_vga_isovists_onnut_gallery.png`](benchmarks/comparison_03_vga_isovists_onnut_gallery.png) — 3-panel academic collage on Bangkok On Nut Topological Axial Analysis (`Hillier D_n`, `N = 30,493` across `n, R3, R5`, `R² = 1.000000`, `34.9×` faster).
-- [`docs/benchmarks/comparison_04_benchmark_summary_and_agents.png`](benchmarks/comparison_04_benchmark_summary_and_agents.png) — 3-panel academic collage on Architectural Floorplan Visibility Graph Analysis (`VGA`) & Analytical 2D Benedikt Isovists (`N = 2,101` cells, `1,044,800` visibility edges, `R² = 1.000000`, `35.8×` faster).
+- [`docs/benchmarks/comparison_04_benchmark_summary_and_agents.png`](benchmarks/comparison_04_benchmark_summary_and_agents.png) — 3-panel academic collage on Bangkok Metropolis Citywide Arterials (`Tulip-1024` CSR, `N = 166,514`, `NACH_Norm_R2000m`, `R² = 1.000000`, `< 16 MB` RAM).
+- [`docs/benchmarks/comparison_05_spatial_vga_isovists_agents.png`](benchmarks/comparison_05_spatial_vga_isovists_agents.png) — 3-panel academic collage on Architectural Spatial Visibility (`VGA + 2D Isovists + Gibson Visual Agents`, `N = 2,101` cells, `1,044,800` visibility edges, `R² = 1.000000`, `35.8×` faster, Standalone `.exe` Only).
 
 ### 8.4 Model Context Protocol (`sse-mcp.exe`) & Live Workstation Bridge (`127.0.0.1:9884`)
 

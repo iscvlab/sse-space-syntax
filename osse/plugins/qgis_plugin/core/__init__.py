@@ -54,8 +54,6 @@ from .solvers_segment import (
 )
 from .solvers_axial import solve_axial_analysis, calculate_hillier_diamond_dn
 from .solvers_natural_roads import concatenate_natural_road_strokes
-from .solvers_vga import generate_vga_grid, solve_vga_visibility_graph, compute_isovist_at_point
-from .solvers_agents import solve_agent_analysis, AgentSimulationEngine
 from .utils import parse_radii
 
 __all__ = [
@@ -97,10 +95,5 @@ __all__ = [
     "solve_axial_analysis",
     "calculate_hillier_diamond_dn",
     "concatenate_natural_road_strokes",
-    "generate_vga_grid",
-    "solve_vga_visibility_graph",
-    "compute_isovist_at_point",
-    "solve_agent_analysis",
-    "AgentSimulationEngine",
     "parse_radii"
 ]

@@ -13,7 +13,7 @@ Before publishing to any public registry, verify all 5 automated release gates:
 - [x] **Rust Core & CLI Verification**: `cargo test --release` (`15/15` passing) and `.\sse-cli.exe benchmark` (`9/9` suites `PASS`).
 - [x] **Python & QGIS Engine Unit Tests**: `python -m pytest tests/test_osse_engine.py -v` (`19/19` passing, including `test_depthmapx_tulip_1024_barnsbury_exact_parity` with `R² = 1.00000000` and `max|Δ| = 0.0000`).
 - [x] **QGIS 3.22–4.x (`Qt6 Ready`) Scanner**: `check_qt6.py` (`100% COMPLIANT`, `supportsQt6=True`, `qgisMaximumVersion=4.99`).
-- [x] **Deterministic Single-Root Zip Packaging**: `package_qgis.py` producing `dist/sse_v1.1.0.zip` (single root `sse/`, `icon.png` `256×256` RGBA).
+- [x] **Deterministic Single-Root Zip Packaging**: `package_qgis.py` producing `dist/sse_v1.1.0.zip` (single root `sse/`, `icon.png` `256×256` RGBA, 5 street network algorithms).
 - [x] **Pre-Flight Security & Path Audit**: `audit_engine.py --platform qgis` and `audit_engine.py --platform github` (`0 Blocking / 0 Advisory`, zero hardcoded machine paths).
 
 ---
@@ -66,7 +66,7 @@ gh release create v1.1.0 `
 
 ## 2. 🗺️ Official QGIS Plugin Repository Release (`plugins.qgis.org`)
 
-The 6-algorithm QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Processing plugin is located at `osse/plugins/qgis_plugin/` and packaged into `dist/sse_v1.1.0.zip`.
+The 5-algorithm QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Processing plugin is located at `osse/plugins/qgis_plugin/` and packaged into `dist/sse_v1.1.0.zip`.
 
 ### Step 2.1: Plugin Archive Structure (`sse/`)
 The official QGIS Plugin Repository requires a single-root `.zip` archive (`sse/`) containing:
@@ -94,7 +94,7 @@ python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\check_qt6.py" "o
 python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\package_qgis.py" "osse/plugins/qgis_plugin" --output-dir "dist" --package-name "sse"
 python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\audit_engine.py" "osse/plugins/qgis_plugin" --platform qgis
 ```
-This outputs `dist/sse_v1.1.0.zip` (`189,341 bytes`, single-root `sse/`), verified against all Qt6, Flake8, Security, and Single-Root gates.
+This outputs `dist/sse_v1.1.0.zip` (single-root `sse/`), verified against all Qt6, Flake8, Security, and Single-Root gates.
 
 ### Step 2.3: Upload to `plugins.qgis.org`
 1. Navigate to: [https://plugins.qgis.org/plugins/add/](https://plugins.qgis.org/plugins/add/)

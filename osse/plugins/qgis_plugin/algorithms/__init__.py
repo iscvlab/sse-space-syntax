@@ -13,7 +13,6 @@ from .algorithm_prepare_osm import (
     SSEPrepareOSMAlgorithm,
     OpenDepthmapPrepareOSMAlgorithm,
 )
-from .algorithm_vga import SSEVGAAlgorithm, OpenDepthmapVGAAlgorithm
 from .algorithm_step_depth import (
     SSEStepDepthAlgorithm,
     OpenDepthmapStepDepthAlgorithm,
@@ -25,11 +24,9 @@ __all__ = [
     "SSEAxialAlgorithm",
     "SSENaturalRoadsAlgorithm",
     "SSEPrepareOSMAlgorithm",
-    "SSEVGAAlgorithm",
     "OpenDepthmapASAAlgorithm",
     "OpenDepthmapStepDepthAlgorithm",
     "OpenDepthmapAxialAlgorithm",
     "OpenDepthmapNaturalRoadsAlgorithm",
     "OpenDepthmapPrepareOSMAlgorithm",
-    "OpenDepthmapVGAAlgorithm",
 ]
