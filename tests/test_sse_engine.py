@@ -481,4 +481,3 @@ def test_qgis_portal_bandit_and_qt6_scoped_enums_guard():
                     assert (node.value.id, node.attr) not in forbidden_unscoped, (
                         f"Unscoped Qt6 enum {node.value.id}.{node.attr} in {py_file}:{node.lineno}"
                     )
-
