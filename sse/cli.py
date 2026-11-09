@@ -1,12 +1,12 @@
 """
-Open Space Syntax Computational Engine (OSSE) - CLI Runner
+SSE — Space Syntax Engine (SSE) - CLI Runner
 Author: Napat (Tan) Phasundhiae
 
 Usage:
-    osse clean --input <file> --output <file> [--snap 3.0] [--rungs]
-    osse export-depthmapx --input <file> --out-dxf <file> [--out-mif <file>]
-    osse solve --input <file> --output <file> [--radii 800,2000,5000] [--include-global]
-    osse import-depthmapx --mif <file> --output <file>
+    sse clean --input <file> --output <file> [--snap 3.0] [--rungs]
+    sse export-depthmapx --input <file> --out-dxf <file> [--out-mif <file>]
+    sse solve --input <file> --output <file> [--radii 800,2000,5000] [--include-global]
+    sse import-depthmapx --mif <file> --output <file>
 """
 
 import sys
@@ -182,7 +182,7 @@ def cmd_import_depthmapx(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Open Space Syntax Computational Engine (OSSE) CLI")
+    parser = argparse.ArgumentParser(description="SSE — Space Syntax Engine CLI")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # clean

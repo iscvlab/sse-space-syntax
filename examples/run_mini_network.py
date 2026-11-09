@@ -1,5 +1,5 @@
 """
-OSSE Space Syntax Example: Synthetic Grid & Irregular Urban Network
+SSE Space Syntax Example: Synthetic Grid & Irregular Urban Network
 Demonstrates end-to-end workflow:
 1. Creating or importing network lines
 2. Snapping endpoints and healing micro-gaps
@@ -13,17 +13,17 @@ import os
 import sys
 from shapely.geometry import LineString
 
-# Ensure osse package is importable when executed directly
+# Ensure sse package is importable when executed directly
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from osse.core.snapping import snap_endpoints_rtree  # noqa: E402
-from osse.core.topology import planarize_and_node, build_angular_dual_graph  # noqa: E402
-from osse.core.solver import solve_space_syntax_metrics  # noqa: E402
-from osse.io_handlers.geojson_io import write_geojson  # noqa: E402
+from sse.core.snapping import snap_endpoints_rtree  # noqa: E402
+from sse.core.topology import planarize_and_node, build_angular_dual_graph  # noqa: E402
+from sse.core.solver import solve_space_syntax_metrics  # noqa: E402
+from sse.io_handlers.geojson_io import write_geojson  # noqa: E402
 
 
 def main():
-    print("=== Open Space Syntax Computational Engine (OSSE) Demo ===")
+    print("=== SSE — Space Syntax Engine Demo ===")
 
     # 1. Synthesize a sample urban street network (coordinates in meters)
     print("\n[Step 1] Synthesizing street centerline geometries...")

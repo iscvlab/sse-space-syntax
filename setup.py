@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Setup script for osse-space-syntax (Open Space Syntax Computational Engine)."""
+"""Setup script for sse-space-syntax (SSE — Space Syntax Engine)."""
 
 from setuptools import setup
 

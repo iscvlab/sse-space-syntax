@@ -23,9 +23,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-_OSSE = os.path.join(_ROOT, "osse")
-if os.path.isdir(_OSSE) and _OSSE not in sys.path:
-    sys.path.insert(0, _OSSE)
+_SSE = os.path.join(_ROOT, "sse")
+if os.path.isdir(_SSE) and _SSE not in sys.path:
+    sys.path.insert(0, _SSE)
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 

@@ -2,7 +2,7 @@
 
 > **SSE — Space Syntax Engine (`v1.1.0`)**  
 > Author: Napat (Tan) Phasundhiae (ณภัทร ฝาสันเทียะ) | Computational Design Technologist  
-> Target Platforms: GitHub (`napattan/sse-space-syntax`), Official QGIS Python Plugins Repository (`plugins.qgis.org`), PyPI (`pip install osse-space-syntax`), Food4Rhino (Grasshopper)
+> Target Platforms: GitHub (`napattan/sse-space-syntax`), Official QGIS Python Plugins Repository (`plugins.qgis.org`), PyPI (`pip install sse-space-syntax`), Food4Rhino (Grasshopper)
 
 ---
 
@@ -31,7 +31,7 @@ Follow these steps to publish the repository and standalone Windows binaries (`s
 
 ### Step 1.2: Initialize, Commit, Tag `v1.1.0` & Push from Local Directory
 
-Open PowerShell in the `osse-space-syntax` repository root:
+Open PowerShell in the `sse-space-syntax` repository root:
 
 ```powershell
 # Stage all source, documentation, and benchmark plate files
@@ -66,7 +66,7 @@ gh release create v1.1.0 `
 
 ## 2. 🗺️ Official QGIS Plugin Repository Release (`plugins.qgis.org`)
 
-The 5-algorithm QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Processing plugin is located at `osse/plugins/qgis_plugin/` and packaged into `dist/sse_v1.1.0.zip`.
+The 5-algorithm QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Processing plugin is located at `sse/plugins/qgis_plugin/` and packaged into `dist/sse_v1.1.0.zip`.
 
 ### Step 2.1: Plugin Archive Structure (`sse/`)
 The official QGIS Plugin Repository requires a single-root `.zip` archive (`sse/`) containing:
@@ -90,9 +90,9 @@ sse/
 ### Step 2.2: Build & Audit Deterministic Single-Root Release Archive
 Run the `/xpublish` packaging and audit scripts from the repository root:
 ```powershell
-python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\check_qt6.py" "osse/plugins/qgis_plugin"
-python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\package_qgis.py" "osse/plugins/qgis_plugin" --output-dir "dist" --package-name "sse"
-python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\audit_engine.py" "osse/plugins/qgis_plugin" --platform qgis
+python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\check_qt6.py" "sse/plugins/qgis_plugin"
+python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\package_qgis.py" "sse/plugins/qgis_plugin" --output-dir "dist" --package-name "sse"
+python "$env:USERPROFILE\.gemini\config\skills\xpublish\scripts\audit_engine.py" "sse/plugins/qgis_plugin" --platform qgis
 ```
 This outputs `dist/sse_v1.1.0.zip` (single-root `sse/`), verified against all Qt6, Flake8, Security, and Single-Root gates.
 
@@ -110,9 +110,9 @@ This outputs `dist/sse_v1.1.0.zip` (single-root `sse/`), verified against all Qt
 
 ---
 
-## 3. 🐍 PyPI Package Distribution (`pip install osse-space-syntax`)
+## 3. 🐍 PyPI Package Distribution (`pip install sse-space-syntax`)
 
-Publishing to PyPI allows researchers and practitioners to install the Python API and CLI via `pip install osse-space-syntax[fast]`.
+Publishing to PyPI allows researchers and practitioners to install the Python API and CLI via `pip install sse-space-syntax[fast]`.
 
 ```powershell
 # Install build & upload tools
@@ -129,6 +129,6 @@ python -m twine upload dist/osse_space_syntax*
 
 ## 4. 🦏 Food4Rhino & Yak Package Release (Grasshopper C#)
 
-The multi-threaded Grasshopper C# solver is located at `osse/plugins/grasshopper_csharp/SpaceSyntaxComponent.cs`.
+The multi-threaded Grasshopper C# solver is located at `sse/plugins/grasshopper_csharp/SpaceSyntaxComponent.cs`.
 1. Compile `SpaceSyntaxComponent.cs` against `RhinoCommon.dll` and `Grasshopper.dll` (`.NET 7.0` for Rhino 8 / `.NET Framework 4.8` for Rhino 7).
 2. Package via `yak build` and publish to Food4Rhino / McNeel Yak Package Server.

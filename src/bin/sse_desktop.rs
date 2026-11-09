@@ -8079,7 +8079,7 @@ impl eframe::App for SseWorkstationApp {
 }
 
 fn load_sse_window_icon() -> Option<std::sync::Arc<egui::IconData>> {
-    const ICON_BYTES: &[u8] = include_bytes!("../../osse/plugins/qgis_plugin/icon.png");
+    const ICON_BYTES: &[u8] = include_bytes!("../../sse/plugins/qgis_plugin/icon.png");
     let img = image::load_from_memory(ICON_BYTES).ok()?.into_rgba8();
     let (width, height) = img.dimensions();
     Some(std::sync::Arc::new(egui::IconData {

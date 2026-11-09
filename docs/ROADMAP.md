@@ -1,6 +1,6 @@
-# OSSE Strategic Roadmap & Milestone Plan
+# SSE Strategic Roadmap & Milestone Plan
 
-> **Open Space Syntax Computational Engine (OSSE)**  
+> **Open Space Syntax Computational Engine (SSE)**  
 > Version Track: 2026-2027
 
 ---

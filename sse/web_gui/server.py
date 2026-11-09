@@ -300,7 +300,7 @@ def start_server(port: int = PORT) -> None:
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", port), Handler) as httpd:
         print("=" * 70)
-        print("  OPENDEPTHMAP (OSSE PRO) — LOCAL WORKSTATION WEB SERVER")
+        print("  OPENDEPTHMAP (SSE PRO) — LOCAL WORKSTATION WEB SERVER")
         print(f"  URL: http://localhost:{port}")
         print(f"  API: http://localhost:{port}/api/health | POST /api/analyze")
         print("=" * 70)

@@ -1,4 +1,4 @@
-// Open Space Syntax Engine (OSSE) - Grasshopper C# Component
+// Open Space Syntax Engine (SSE) - Grasshopper C# Component
 // Enforces primitive array structures (Point3d[], double[]) and Parallel.For multi-threading
 // Author: Napat (Tan) Phasundhiae
 

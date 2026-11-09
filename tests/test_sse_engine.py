@@ -1,5 +1,5 @@
 """
-Unit tests for OSSE Space Syntax Computational Engine.
+Unit tests for SSE Space Syntax Computational Engine.
 Tests watertight geometry healing, angular dual graph building, metric Brandes solver,
 Analysis Type x Radius Type x Weighting perturbations, Tulip-1024 binning,
 Grade separation unlinking, Dead-end stub pruning, Origin Step Depth, and CSV/R² exports.
@@ -14,26 +14,26 @@ from shapely.geometry import LineString
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from osse.core.snapping import snap_endpoints_rtree  # noqa: E402
-from osse.core.topology import (  # noqa: E402
+from sse.core.snapping import snap_endpoints_rtree  # noqa: E402
+from sse.core.topology import (  # noqa: E402
     planarize_and_node,
     build_angular_dual_graph,
     explode_to_2point_segments,
     turn_angle,
 )
-from osse.core.solver import solve_space_syntax_metrics  # noqa: E402
-from osse.core.graph import (  # noqa: E402
+from sse.core.solver import solve_space_syntax_metrics  # noqa: E402
+from sse.core.graph import (  # noqa: E402
     CSRDualGraph,
     calculate_turn_deflection,
     detect_grade_unlinks,
 )
-from osse.core.solvers_segment import (  # noqa: E402
+from sse.core.solvers_segment import (  # noqa: E402
     solve_angular_segment_analysis,
     solve_origin_step_depth,
     compute_network_summary_diagnostics,
     export_detailed_asa_tables,
 )
-from osse.core.cleaner import (  # noqa: E402
+from sse.core.cleaner import (  # noqa: E402
     clean_network_adaptive_watertight,
     remove_dead_end_stubs,
     extract_grade_level_from_props,
@@ -377,7 +377,7 @@ def test_depthmapx_tulip_1024_barnsbury_exact_parity():
 
 def test_osm_pipeline_and_prenoded_guard_parity():
     """Verify QGIS Plugin OSM Overpass parser, UTM projection, grade separation, P90 cleaner, and FALS-08 guard."""
-    from osse.core import (
+    from sse.core import (
         build_overpass_highway_query,
         parse_overpass_json_to_features,
         resolve_universal_metric_crs_pyproj,
@@ -440,7 +440,7 @@ def test_qgis_portal_bandit_and_qt6_scoped_enums_guard():
     import ast
     import pathlib
     import pytest
-    from osse.core.osm_downloader import _validate_http_url, fetch_osm_network
+    from sse.core.osm_downloader import _validate_http_url, fetch_osm_network
 
     assert _validate_http_url("https://overpass-api.de/api/interpreter") == "https://overpass-api.de/api/interpreter"
     for bad_url in ("file:///etc/passwd", "ftp://overpass-api.de/api", "custom://host/path", ""):
@@ -449,7 +449,7 @@ def test_qgis_portal_bandit_and_qt6_scoped_enums_guard():
     with pytest.raises(ValueError):
         fetch_osm_network((100.59, 13.70, 100.60, 13.71), custom_endpoint="file:///etc/passwd")
 
-    plugin_dir = pathlib.Path(__file__).resolve().parent.parent / "osse" / "plugins" / "qgis_plugin"
+    plugin_dir = pathlib.Path(__file__).resolve().parent.parent / "sse" / "plugins" / "qgis_plugin"
     forbidden_unscoped = {
         ("QgsWkbTypes", "LineString"),
         ("QgsWkbTypes", "NoGeometry"),

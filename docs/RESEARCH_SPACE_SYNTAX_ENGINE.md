@@ -1,7 +1,7 @@
-# Deep Technical Research & 4-Axis Forensic Study: Open Space Syntax Computational Engine (`OSSE` / `OpenDepthmap`)
+# Deep Technical Research & 4-Axis Forensic Study: Open Space Syntax Computational Engine (`SSE` / `OpenDepthmap`)
 
 > **🧠 XDeep-Research Contract** — `[FORMULATE / MODEL + VERIFY / AUDIT]` × `[Computational Spatial Network Analysis & Graph Theory]` (`Tier 3`)  
-> • **Target Deliverable & Scope**: Canonical mathematical formulation, SI unit bridge, closed-form 1D/small-graph analytical benchmarks, Universal Network Edition (`v1.1.0`) algorithm matrix, and 4-Axis Forensic Audit Matrix (`UL-01` to `UL-08`) for `osse-space-syntax v1.1.0` and `OpenDepthmap (OSSE Pro)`.  
+> • **Target Deliverable & Scope**: Canonical mathematical formulation, SI unit bridge, closed-form 1D/small-graph analytical benchmarks, Universal Network Edition (`v1.1.0`) algorithm matrix, and 4-Axis Forensic Audit Matrix (`UL-01` to `UL-08`) for `sse-space-syntax v1.1.0` and `OpenDepthmap (SSE Pro)`.  
 > • **Target Stack & Pinned Versions**: Python `≥ 3.9`, `numpy ≥ 1.22.0`, `scipy ≥ 1.9.0`, `shapely ≥ 2.0.0` (C-GEOS), `networkx ≥ 3.0`, `pyproj ≥ 3.4.0`, QGIS `3.22–4.x` (`PyQt5`/`PyQt6` Dual-Compatible).  
 > • **Wave 3 Verification Score**: `9 / 9` Primary Literature & Upstream Standards Verified (`0` Blocking Errors, `0` Unverified Claims, `8 / 8` Live Pytest Benchmarks Passing).
 
@@ -30,14 +30,14 @@
 
 Legacy desktop Space Syntax workflows rely on unindexed `O(N²)` segment intersection loops and object-heavy graph representations that exhaust system RAM or freeze the GUI thread on metropolitan networks (`N > 40,000` to `100,000` segments) — Proven by: `depthmapX` single-threaded `salalib` execution characteristics ([SpaceGroupUCL, 2020](https://github.com/SpaceGroupUCL/depthmapX/tree/master/salalib)).
 
-**OSSE (`osse-space-syntax`)** and **OpenDepthmap (OSSE Pro)** resolve these bottlenecks through three structural innovations:
-1. **Compressed Sparse Row (`CSR`) Dual Graph**: Packs `N` segment nodes and `M` directed turn transitions into contiguous `uint32` and `float32` NumPy arrays (`row_offsets`, `target_nodes`, `angular_weights`, `metric_lengths`), requiring `< 16 MB` RAM for `200,000` segments (`~40 bytes/edge`) — Proven by: [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py) and `CSRDualGraph.memory_footprint_bytes()`.
-2. **`O(N log N)` C-GEOS `STRtree` Planarization & P90 Adaptive Watertight Cleaning**: Replaces quadratic pair scanning with packed R-tree spatial indexing and empirical 90th-percentile (`P90`) gap closure — Proven by: [`osse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/snapping.py).
-3. **Bounded Brandes Priority-Queue Traversal with Metric Horizon Pruning**: Truncates Dijkstra expansion whenever cumulative travel distance exceeds radius `R_m`, reducing per-source complexity from `O(V log V + E)` over the entire city to `O(V_r log V_r + E_r)` within the local catchment — Proven by: [`osse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solver.py) (`solve_brandes_metric`).
+**SSE (`sse-space-syntax`)** and **OpenDepthmap (SSE Pro)** resolve these bottlenecks through three structural innovations:
+1. **Compressed Sparse Row (`CSR`) Dual Graph**: Packs `N` segment nodes and `M` directed turn transitions into contiguous `uint32` and `float32` NumPy arrays (`row_offsets`, `target_nodes`, `angular_weights`, `metric_lengths`), requiring `< 16 MB` RAM for `200,000` segments (`~40 bytes/edge`) — Proven by: [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py) and `CSRDualGraph.memory_footprint_bytes()`.
+2. **`O(N log N)` C-GEOS `STRtree` Planarization & P90 Adaptive Watertight Cleaning**: Replaces quadratic pair scanning with packed R-tree spatial indexing and empirical 90th-percentile (`P90`) gap closure — Proven by: [`sse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/snapping.py).
+3. **Bounded Brandes Priority-Queue Traversal with Metric Horizon Pruning**: Truncates Dijkstra expansion whenever cumulative travel distance exceeds radius `R_m`, reducing per-source complexity from `O(V log V + E)` over the entire city to `O(V_r log V_r + E_r)` within the local catchment — Proven by: [`sse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solver.py) (`solve_brandes_metric`).
 
 | Engine / Solver | 200k-Segment Benchmark | Relative Speed | Key Architectural Property |
 | :--- | :--- | :--- | :--- |
-| **OpenDepthmap (OSSE Pro) CSR** | `████████████████████` **`99.6 s`** | **`84.0× Faster`** | **`< 16 MB` CSR RAM**, `O(N log N)` STRtree, early metric pruning |
+| **OpenDepthmap (SSE Pro) CSR** | `████████████████████` **`99.6 s`** | **`84.0× Faster`** | **`< 16 MB` CSR RAM**, `O(N log N)` STRtree, early metric pruning |
 | **UCL DepthmapX v0.8.0 GUI** | `█░░░░░░░░░░░░░░░░░░░` `> 8,400 s` | `1.0× Baseline` | Single-threaded UI loop; frequent OOM crash above `~40k–100k` segments |
 | **NetworkX Brandes (Python)** | `░░░░░░░░░░░░░░░░░░░░` `> 54,000 s` | `0.15× Speed` | Unpruned Python `dict` overhead (`> 12 GB` RAM on citywide graphs) |
 
@@ -79,7 +79,7 @@ flowchart LR
 | **4** | `sse:axial_analysis` | Hillier & Hanson (1984) Topological Axial BFS (`D_n`, `RA`, `RRA`, `Integration [HH / Tekl]`, `Entropy`) | Axial centrality layer + optional Detailed Attribute CSV |
 | **5** | `sse:natural_roads` | Jiang & Claramunt (2004) Gestalt Good Continuity Stroke Concatenation (`θ ≤ θ_max`) | Continuous arterial stroke polylines (`stroke_id`, `length_m`) |
 
-> **Note on Architectural Spatial Visibility (`VGA`, `2D Benedikt Isovists`, `60 FPS Gibson Visual Agents`)**: High-density visibility graph and interactive agent simulations are provided natively in the **Standalone Rust Workstation (`sse-desktop.exe`)**, **Batch CLI (`sse-cli.exe`)**, **MCP Server (`sse-mcp.exe`)**, and Python API (`osse.core.solvers_vga` / `osse.core.solvers_agents`).
+> **Note on Architectural Spatial Visibility (`VGA`, `2D Benedikt Isovists`, `60 FPS Gibson Visual Agents`)**: High-density visibility graph and interactive agent simulations are provided natively in the **Standalone Rust Workstation (`sse-desktop.exe`)**, **Batch CLI (`sse-cli.exe`)**, **MCP Server (`sse-mcp.exe`)**, and Python API (`sse.core.solvers_vga` / `sse.core.solvers_agents`).
 
 ---
 
@@ -88,7 +88,7 @@ flowchart LR
 ### A. Governing Mathematical Formulations (Native Unicode)
 
 1. **Metric Coordinate Projection (`EPSG:4326 deg` ↔ Metric `UTM m`)**:
-   - Geographic coordinates `(λ, φ)` in degrees (`EPSG:4326`) are projected into conformal metric Universal Transverse Mercator coordinates `(x, y)` in meters (`m`) prior to any Euclidean distance, buffer, or angle calculation — Proven by: [`osse/core/projection.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/projection.py) (`reproject_geometry`).
+   - Geographic coordinates `(λ, φ)` in degrees (`EPSG:4326`) are projected into conformal metric Universal Transverse Mercator coordinates `(x, y)` in meters (`m`) prior to any Euclidean distance, buffer, or angle calculation — Proven by: [`sse/core/projection.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/projection.py) (`reproject_geometry`).
 
 2. **Enhanced 5-Step P90 Adaptive Watertight Street Cleaner**:
    - **Step 0–1 (Dangle Incidence & 2-Point Segment Explosion)**: Deconstructs polylines into 2-point segments `e_i = (P_0, P_1)` and computes vertex degree `deg(v)` at `1 mm` (`10⁻³ m`) quantized coordinates. Locks all existing junctions (`deg(v) ≥ 2`) and isolates true dangling endpoints (`deg(v) == 1`).
@@ -103,7 +103,7 @@ flowchart LR
    - **Step 5 (Post-Flight Topology Invariant Gate)**: Verifies `invalid_count == 0`, `J_clean ≥ J_raw` (junction conservation), `C_clean ≤ C_raw` (no fragmentation), and `-0.5% ≤ ΔL_pct ≤ +5.0%`.
 
 3. **Turner (2007) Angular Dual Graph & Turn Deflection Cost**:
-   - Each planarized road segment `i ∈ {0, ..., N - 1}` becomes a dual-graph vertex `v_i ∈ V_dual` with segment length `L_i` (`m`) and terminal outward bearings `b_{i,0}, b_{i,1} ∈ (-π, π]` — Proven by: [Turner, 2007](https://doi.org/10.1068/b32067) and [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py).
+   - Each planarized road segment `i ∈ {0, ..., N - 1}` becomes a dual-graph vertex `v_i ∈ V_dual` with segment length `L_i` (`m`) and terminal outward bearings `b_{i,0}, b_{i,1} ∈ (-π, π]` — Proven by: [Turner, 2007](https://doi.org/10.1068/b32067) and [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py).
    - When segment ends `(i, end_i)` and `(j, end_j)` meet at a shared junction vertex, raw bearing difference is `Δb = |b_i - b_j| mod 2π`, folded into `[0, π]` via `Δb_fold = 2π - Δb` if `Δb > π` else `Δb`.
    - Through-movement angular deflection in radians is:
      `θ_deflect(i, j) = |Δb_fold - π| ∈ [0, π]`
@@ -122,7 +122,7 @@ flowchart LR
      - `weight_mode ∈ {unweighted, length, custom}` weights Brandes pair dependencies and total depth by normalized segment weight `w_norm(u) = w_node(u) ÷ mean(w_node)` (with `w_node = 1.0` in `unweighted` mode, `L_u` in `length` mode, or user attribute `a_u` in `custom` mode).
    - Multi-Source Origin Step Depth (`solve_origin_step_depth`): Given origin set `O ⊂ V_dual`, simultaneous Dijkstra computes `angular_step_depth`, `metric_step_depth_m`, `topo_step_depth`, and `nearest_origin_id` (`0` at `u ∈ O`, monotonic positive along connected paths).
    - Network Summary Diagnostics (`compute_network_summary_diagnostics` & `export_detailed_asa_tables`): Computes `MeanDepth_R(s) = TotalDepth_R(s) ÷ max(NodeCount_R(s), 1)`, **Intelligibility `R² = corrcoef(Connectivity, NAIN_Rn)²`**, and **Synergy `R² = corrcoef(NAIN_R_local, NAIN_Rn)²`**.
-   - For each source segment `s` and metric horizon `R_m ∈ {400, 800, 1200, 2000, 5000, ∞} m`, Dijkstra traversal expands neighbor `v` from `u` only if `d_metric(s, u) + w_metric(u, v) ≤ R_m` — Proven by: [Brandes, 2001](https://doi.org/10.1080/0022250X.2001.9990249) and [`osse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solver.py).
+   - For each source segment `s` and metric horizon `R_m ∈ {400, 800, 1200, 2000, 5000, ∞} m`, Dijkstra traversal expands neighbor `v` from `u` only if `d_metric(s, u) + w_metric(u, v) ≤ R_m` — Proven by: [Brandes, 2001](https://doi.org/10.1080/0022250X.2001.9990249) and [`sse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solver.py).
    - Predecessor lists `P_s[v]` and shortest-path counts `σ_s[v]` accumulate within tie tolerance `ε = 10⁻⁹`, followed by reverse stack accumulation:
      `δ_s[v] = ∑_{w : v ∈ P_s[w]} (σ_s[v] ÷ σ_s[w]) × (1.0 + δ_s[w])`
      `Choice_R(w) = ∑_{s ≠ w} δ_s[w] × γ_stride`
@@ -130,7 +130,7 @@ flowchart LR
    - Exact Hillier, Yang & Turner (2012) logarithmic normalizations — Proven by: [Hillier et al., 2012](https://discovery.ucl.ac.uk/id/eprint/1395709/):
      - `NACH = ln(Choice + 1.0) ÷ ln(TotalDepth + 3.0)`
      - `NAIN = (NodeCount ^ 1.2) ÷ (TotalDepth + 2.0)`
-   - Bounded cross-scale cartographic normalization (`[0.55, 1.80]` for `NACH`, `[0.60, 1.75]` for `NAIN`) — Proven by: [`osse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solver.py):
+   - Bounded cross-scale cartographic normalization (`[0.55, 1.80]` for `NACH`, `[0.60, 1.75]` for `NAIN`) — Proven by: [`sse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solver.py):
      - `NACH_scaled(u) = 0.55 + 1.25 × (ln(Choice(u) + 1.0) ÷ ln(max_v Choice(v) + 1.0))`
      - `NAIN_scaled(u) = 0.60 + 1.15 × (ln(Integration(u) + 1.0) ÷ ln(max_v Integration(v) + 1.0))`
 
@@ -147,12 +147,12 @@ flowchart LR
 
 | Quantity / Symbol | Input Representation | Internal SI / Math Unit & Bounds | Governing Module / Standard |
 | :--- | :--- | :--- | :--- |
-| **Geographic Coordinates `(λ, φ)`** | `EPSG:4326` (`deg` lon/lat) | Metric `UTM` `(x, y)` in `m` (`λ ∈ [-180°, 180°]`) | [`osse/core/projection.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/projection.py) |
-| **Snapping & Raycast Radius `D_max`** | User/Auto tolerance (`m`) | Meters (`m`, `Auto: [6.0 m, 20.0 m]`) | [`osse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/snapping.py) |
-| **Segment Length `L_i` & Radius `R_m`** | Polyline length (`m`) | Meters (`m`, `L_i ≥ 0.01 m`, `R_m ∈ [100 m, ∞)`) | [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py) |
-| **Segment Bearing `b_i` & Turn `θ_deflect`** | `atan2(Δx, Δy)` | Radians (`rad`, `b_i ∈ (-π, π]`, `θ_deflect ∈ [0, π]`) | [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py) |
+| **Geographic Coordinates `(λ, φ)`** | `EPSG:4326` (`deg` lon/lat) | Metric `UTM` `(x, y)` in `m` (`λ ∈ [-180°, 180°]`) | [`sse/core/projection.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/projection.py) |
+| **Snapping & Raycast Radius `D_max`** | User/Auto tolerance (`m`) | Meters (`m`, `Auto: [6.0 m, 20.0 m]`) | [`sse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/snapping.py) |
+| **Segment Length `L_i` & Radius `R_m`** | Polyline length (`m`) | Meters (`m`, `L_i ≥ 0.01 m`, `R_m ∈ [100 m, ∞)`) | [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py) |
+| **Segment Bearing `b_i` & Turn `θ_deflect`** | `atan2(Δx, Δy)` | Radians (`rad`, `b_i ∈ (-π, π]`, `θ_deflect ∈ [0, π]`) | [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py) |
 | **Turner Angular Cost `w_turn`** | `θ_deflect ÷ (π ÷ 2)` | Dimensionless turn units (`[0.0, 2.0]`, `90° = 1.0`) | [Turner, 2007](https://doi.org/10.1068/b32067) |
-| **Betweenness Choice `Choice_R`** | Shortest-path pair fraction | Dimensionless path count (`[0.0, (N - 1)(N - 2)]`) | [`osse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solver.py) |
+| **Betweenness Choice `Choice_R`** | Shortest-path pair fraction | Dimensionless path count (`[0.0, (N - 1)(N - 2)]`) | [`sse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solver.py) |
 | **Normalised Choice `NACH` / `NACH_norm`** | Logarithmic ratio | Dimensionless index (`Raw: [0.0, ~1.6]`, `Norm: [0.0, 1.0]`) | [Hillier et al., 2012](https://discovery.ucl.ac.uk/id/eprint/1395709/) |
 | **Isovist Area `A_iso` & Perimeter `P_iso`** | Corner-ray triangle sum | Square meters (`m²`) & meters (`m`, `Compactness ∈ (0, 1]`) | [Benedikt, 1979](https://doi.org/10.1068/b060047) |
 
@@ -196,17 +196,17 @@ For `n = 5` axial lines where central spine `L₀` intersects four leaf lines `L
 
 ## 5. 4-Axis Forensic Audit Matrix (`UL-01` to `UL-08`)
 
-Every subsystem in `osse-space-syntax` and `OpenDepthmap` was audited against the 8 Universal First-Principles Laws (`UL-01` to `UL-08`):
+Every subsystem in `sse-space-syntax` and `OpenDepthmap` was audited against the 8 Universal First-Principles Laws (`UL-01` to `UL-08`):
 
 | Law ID & Forensic Axis | Subsystem Audited (`file:line`) | Forensic Mechanism & Invariant Enforcement | Status |
 | :--- | :--- | :--- | :---: |
-| **`UL-01` · Axis 1 (`Truth`)**: Bracketed Support & Graph-Cut Isolation | [`osse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solvers_segment.py) (`solve_brandes_single_radius`) | Shortest-path routing operates strictly over noded graph edges `E` with hard metric horizon cutoff (`if new_metric > radius_m: continue`) and `0` Euclidean cross-gap extrapolation. | **`VERIFIED`** |
-| **`UL-02` · Axis 1 (`Truth`)**: Two-Stage Candidate Pre-Filter (`S_cand`) vs. Exact Predicate (`P(x)`) | [`osse/core/cleaner.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/cleaner.py) (`clean_network_adaptive_watertight`) | Stage 1 `STRtree.query(ray)` retrieves bbox candidates `S_cand`; Stage 2 evaluates exact intersection, `15°–165°` deflection guard, and `d_perp = d × sin(θ)` slip-road obliquity. | **`VERIFIED`** |
-| **`UL-03` · Axis 2 (`Criteria`)**: Step-Measure Scaling Invariance (`Δμ`) & Zero-Load Guard | [`osse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solvers_segment.py) (`solve_angular_segment_analysis`) | Dual-edge metric distances scale explicitly by segment lengths `0.5 × (L_i + L_j)` (`m`), with `np.max(..., initial=0.0)` guards guaranteeing `0` `NaN`/`Inf` on empty (`N = 0`) or single-node graphs. | **`VERIFIED`** |
-| **`UL-04` · Axis 3 (`Wiring`)**: Hierarchical Partition, Junction Conservation & Remainder Accounting | [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py) (`planarize_and_node`) | `shapely.node` splits crossing lines into pairwise-disjoint child segments (`C_i ∩ C_j == ∅` on interiors) while conserving total network length (`∑ L(C_i) == L(P)`) and `100%` of degree `≥ 3` junctions. | **`VERIFIED`** |
-| **`UL-05` · Axis 2 (`Criteria`)**: Bidirectional Counter-Anchors (`A_pos ∧ A_neg`) | [`osse/core/dual_carriageway.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/dual_carriageway.py) (`synthesize_cross_rungs`) | Locks simultaneous positive anchor (`6.0 m ≤ d ≤ 35.0 m` and parallel alignment `Δθ ≤ 25.0°`) and negative counter-anchor (rejecting non-arterial stubs `< 50.0 m` and cross-streets `Δθ > 25.0°`). | **`VERIFIED`** |
-| **`UL-06` · Axis 2 (`Criteria`)**: Piece-Wise Codomain Reachability & Non-Tautological Scaling | [`osse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solvers_segment.py) (`include_normalized`) | Normalizes `ln(Choice + 1)` by `ln(max_c + 1)` into `[0.0, 1.0]` (`nach_norm_*`, `nain_norm_*`) alongside exact Hillier `nach_*` / `nain_*`, guaranteeing full codomain reachability. | **`VERIFIED`** |
-| **`UL-07` · Axis 3 (`Wiring`)**: Read-Only Feature Transform (`φ(x)`) Decoupling & Atomic File I/O | [`osse/io_handlers/geojson_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/io_handlers/geojson_io.py) & [`dxf_exporter.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/io_handlers/dxf_exporter.py) | Logarithmic `NACH`/`NAIN` transforms (`φ(x)`) are stored in separate output keys without overwriting raw `choice_r*` / `integration_r*` arrays; all disk writes execute atomic `os.replace(temp_path, out_path)`. | **`VERIFIED`** |
+| **`UL-01` · Axis 1 (`Truth`)**: Bracketed Support & Graph-Cut Isolation | [`sse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solvers_segment.py) (`solve_brandes_single_radius`) | Shortest-path routing operates strictly over noded graph edges `E` with hard metric horizon cutoff (`if new_metric > radius_m: continue`) and `0` Euclidean cross-gap extrapolation. | **`VERIFIED`** |
+| **`UL-02` · Axis 1 (`Truth`)**: Two-Stage Candidate Pre-Filter (`S_cand`) vs. Exact Predicate (`P(x)`) | [`sse/core/cleaner.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/cleaner.py) (`clean_network_adaptive_watertight`) | Stage 1 `STRtree.query(ray)` retrieves bbox candidates `S_cand`; Stage 2 evaluates exact intersection, `15°–165°` deflection guard, and `d_perp = d × sin(θ)` slip-road obliquity. | **`VERIFIED`** |
+| **`UL-03` · Axis 2 (`Criteria`)**: Step-Measure Scaling Invariance (`Δμ`) & Zero-Load Guard | [`sse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solvers_segment.py) (`solve_angular_segment_analysis`) | Dual-edge metric distances scale explicitly by segment lengths `0.5 × (L_i + L_j)` (`m`), with `np.max(..., initial=0.0)` guards guaranteeing `0` `NaN`/`Inf` on empty (`N = 0`) or single-node graphs. | **`VERIFIED`** |
+| **`UL-04` · Axis 3 (`Wiring`)**: Hierarchical Partition, Junction Conservation & Remainder Accounting | [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py) (`planarize_and_node`) | `shapely.node` splits crossing lines into pairwise-disjoint child segments (`C_i ∩ C_j == ∅` on interiors) while conserving total network length (`∑ L(C_i) == L(P)`) and `100%` of degree `≥ 3` junctions. | **`VERIFIED`** |
+| **`UL-05` · Axis 2 (`Criteria`)**: Bidirectional Counter-Anchors (`A_pos ∧ A_neg`) | [`sse/core/dual_carriageway.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/dual_carriageway.py) (`synthesize_cross_rungs`) | Locks simultaneous positive anchor (`6.0 m ≤ d ≤ 35.0 m` and parallel alignment `Δθ ≤ 25.0°`) and negative counter-anchor (rejecting non-arterial stubs `< 50.0 m` and cross-streets `Δθ > 25.0°`). | **`VERIFIED`** |
+| **`UL-06` · Axis 2 (`Criteria`)**: Piece-Wise Codomain Reachability & Non-Tautological Scaling | [`sse/core/solvers_segment.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solvers_segment.py) (`include_normalized`) | Normalizes `ln(Choice + 1)` by `ln(max_c + 1)` into `[0.0, 1.0]` (`nach_norm_*`, `nain_norm_*`) alongside exact Hillier `nach_*` / `nain_*`, guaranteeing full codomain reachability. | **`VERIFIED`** |
+| **`UL-07` · Axis 3 (`Wiring`)**: Read-Only Feature Transform (`φ(x)`) Decoupling & Atomic File I/O | [`sse/io_handlers/geojson_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/io_handlers/geojson_io.py) & [`dxf_exporter.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/io_handlers/dxf_exporter.py) | Logarithmic `NACH`/`NAIN` transforms (`φ(x)`) are stored in separate output keys without overwriting raw `choice_r*` / `integration_r*` arrays; all disk writes execute atomic `os.replace(temp_path, out_path)`. | **`VERIFIED`** |
 | **`UL-08` · Axis 4 (`Hot-Path`)**: Live-Callable Parity, `O(N log N)` Indexing & Sensitivity (`ΔX → ΔY ≠ 0`) | [`tests/test_osse_engine.py`](https://github.com/napattan/sse-space-syntax/blob/main/tests/test_osse_engine.py) | Unit test suite imports live production callables (`CSRDualGraph`, `solve_angular_segment_analysis`, `solve_space_syntax_metrics`), verifying `ΔR_m → ΔNACH ≠ 0` and `100%` pass on the 1D analytical benchmark. | **`VERIFIED`** |
 
 ---
@@ -217,25 +217,25 @@ During the forensic audit of the repository and comparative testing against UCL 
 
 1. **Pre-Cleaned Network Re-Planarization Drift (`Resolved`)**:
    - *Discrepancy*: Running `snap_endpoints_watertight(3.0 m)` on an already-planarized CAD/DXF network introduced minor vertex shifts that split `30,493` segments into `31,580` segments (`+1,087` extra splits).
-   - *Fix*: Added `direct_segments=True` mode in `OpenDepthmap` and separated `osse clean` from `osse solve` in the CLI so pre-verified networks construct the dual graph with `100%` 1-to-1 segment count preservation.
+   - *Fix*: Added `direct_segments=True` mode in `OpenDepthmap` and separated `sse clean` from `sse solve` in the CLI so pre-verified networks construct the dual graph with `100%` 1-to-1 segment count preservation.
 2. **Broad `except Exception: pass` File Cleanup Antipattern (`Resolved`)**:
-   - *Discrepancy*: [`osse/io_handlers/dxf_exporter.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/io_handlers/dxf_exporter.py) and [`osse/io_handlers/geojson_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/io_handlers/geojson_io.py) wrapped `os.remove(out_path)` in a broad `try ... except Exception: pass` block prior to `os.replace(temp_path, out_path)`.
+   - *Discrepancy*: [`sse/io_handlers/dxf_exporter.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/io_handlers/dxf_exporter.py) and [`sse/io_handlers/geojson_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/io_handlers/geojson_io.py) wrapped `os.remove(out_path)` in a broad `try ... except Exception: pass` block prior to `os.replace(temp_path, out_path)`.
    - *Fix*: Removed the redundant pre-delete block and relied directly on Python's atomic `os.replace(temp_path, out_path)` syscall (`POSIX` / `Win32 MoveFileExW`), eliminating `Bandit B110` advisories.
 3. **Hardcoded Local Machine Paths in Publishing Guide (`Resolved`)**:
    - *Discrepancy*: [`docs/PUBLISHING_GUIDE.md`](https://github.com/napattan/sse-space-syntax/blob/main/docs/PUBLISHING_GUIDE.md) contained machine-specific Windows paths on lines 35, 39, and 152.
-   - *Fix*: Replaced all machine-bound paths with portable `<repo_root>/osse-space-syntax`, `./osse-space-syntax`, and `<APPDATA>/QGIS/QGIS3/profiles/default/python/plugins/` references.
+   - *Fix*: Replaced all machine-bound paths with portable `<repo_root>/sse-space-syntax`, `./sse-space-syntax`, and `<APPDATA>/QGIS/QGIS3/profiles/default/python/plugins/` references.
 4. **CLI `mif_io` Tuple Unpacking Mismatch (`Resolved`)**:
-   - *Discrepancy*: [`osse/cli.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/cli.py) previously unpacked `read_mif_mid(args.mif)` as a 2-tuple `(lines, table)` whereas `read_mif_mid` returns `List[Dict[str, Any]]`.
-   - *Fix*: Synchronized `cmd_import_depthmapx` and `cmd_export_depthmapx` in [`osse/cli.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/cli.py) with the exact `List[Dict[str, Any]]` contract of [`osse/io_handlers/mif_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/io_handlers/mif_io.py).
+   - *Discrepancy*: [`sse/cli.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/cli.py) previously unpacked `read_mif_mid(args.mif)` as a 2-tuple `(lines, table)` whereas `read_mif_mid` returns `List[Dict[str, Any]]`.
+   - *Fix*: Synchronized `cmd_import_depthmapx` and `cmd_export_depthmapx` in [`sse/cli.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/cli.py) with the exact `List[Dict[str, Any]]` contract of [`sse/io_handlers/mif_io.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/io_handlers/mif_io.py).
 
 ---
 
 ## 7. Actionable Blueprint (`[VERIFIED FACT]` → `[RECOMMENDED SYNTHESIS]`)
 
-- **`[VERIFIED FACT #1]`**: Storing the Turner (2007) angular dual graph in contiguous `uint32`/`float32` CSR arrays reduces memory consumption to `< 16 MB` for `200,000` road segments (`~40 bytes` per directed transition) and accelerates multi-radius Brandes traversal by `60× to 84×` compared to single-threaded desktop GUI loops — Proven by: [`osse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/topology.py) and [`osse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/solver.py).
-- **`[VERIFIED FACT #2]`**: Raw OpenStreetMap urban networks contain `0.5 m – 18.4 m` digitizing undershoots at T-junctions and slip roads, plus topology-splitting dual carriageways that sever syntactic choice corridors unless healed before planarization — Proven by: [`osse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/snapping.py) and [`osse/core/dual_carriageway.py`](https://github.com/napattan/sse-space-syntax/blob/main/osse/core/dual_carriageway.py).
+- **`[VERIFIED FACT #1]`**: Storing the Turner (2007) angular dual graph in contiguous `uint32`/`float32` CSR arrays reduces memory consumption to `< 16 MB` for `200,000` road segments (`~40 bytes` per directed transition) and accelerates multi-radius Brandes traversal by `60× to 84×` compared to single-threaded desktop GUI loops — Proven by: [`sse/core/topology.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/topology.py) and [`sse/core/solver.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/solver.py).
+- **`[VERIFIED FACT #2]`**: Raw OpenStreetMap urban networks contain `0.5 m – 18.4 m` digitizing undershoots at T-junctions and slip roads, plus topology-splitting dual carriageways that sever syntactic choice corridors unless healed before planarization — Proven by: [`sse/core/snapping.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/snapping.py) and [`sse/core/dual_carriageway.py`](https://github.com/napattan/sse-space-syntax/blob/main/sse/core/dual_carriageway.py).
 - **`[RECOMMENDED SYNTHESIS]`**:
-  1. **Always Run Watertight Healing Prior to Dual-Graph Construction on Raw GIS/OSM Extracts**: Execute `osse clean --snap 3.0 --rungs` (or the QGIS `opendepthmap:prepare_osm_network` algorithm in `mode=auto`) before computing `NACH`/`NAIN` on uncleaned OSM data.
+  1. **Always Run Watertight Healing Prior to Dual-Graph Construction on Raw GIS/OSM Extracts**: Execute `sse clean --snap 3.0 --rungs` (or the QGIS `opendepthmap:prepare_osm_network` algorithm in `mode=auto`) before computing `NACH`/`NAIN` on uncleaned OSM data.
   2. **Preserve 1-to-1 Topology on Pre-Cleaned CAD/DXF Benchmarks**: When benchmarking against external `DepthmapX` `.dxf` or `.mif` exports that are already noded, bypass re-snapping (`direct_segments=True` / `is_prenoded_segment_map`) so segment IDs and junction degrees remain identical.
   3. **Pair Local & Global Radii for Multi-Scale Urban Diagnostics**: Evaluate pedestrian local catchments (`R400m`, `R800m`, `R1200m`) alongside mesoscale collector radii (`R2000m`, `R5000m`) and citywide global `Rn` to capture both neighborhood walkability (`NAIN`) and arterial through-movement (`NACH`).
 
@@ -247,7 +247,7 @@ During the forensic audit of the repository and comparative testing against UCL 
 
 In [`src/graph.rs`](../src/graph.rs) and [`src/solvers_asa.rs`](../src/solvers_asa.rs), `SSE v1.1.0` implements the exact directed-segment (`dir ∈ {-1, +1}`) semicircle bucket priority queue (`tulip_bins = 1024 / 2 + 1 = 513` bins) and multi-radius `u32` bitmask coverage (`(coverage >> rbin) << rbin`) from `SpaceGroupUCL/depthmapX` (`salalib/segmmodules/segmtulip.cpp`):
 - **Directed Endpoint Transitions (`forward_segconns` at `p₁`, `back_segconns` at `p₀`)**: Entering neighbor segment `j` at `p₀` sets `conn_dir = +1` (exiting at `p₁` via `forward_segconns`); entering at `p₁` sets `conn_dir = -1` (exiting at `p₀` via `back_segconns`).
-- **Pre-Noded Segment Map Guard (`is_prenoded_segment_map` in [`src/cleaner.rs`](../src/cleaner.rs) & [`osse/core/topology.py`](../osse/core/topology.py) — `FALS-08`)**: Automatically preserves 1-to-1 segment ordering and grade-separated overpass crossings on pre-noded `.mif` segment datasets (`barnsbury_segment_lines.mif` `N = 178` and `onnut_walkable_meso_analyzed.mif` `N = 30,493`).
+- **Pre-Noded Segment Map Guard (`is_prenoded_segment_map` in [`src/cleaner.rs`](../src/cleaner.rs) & [`sse/core/topology.py`](../sse/core/topology.py) — `FALS-08`)**: Automatically preserves 1-to-1 segment ordering and grade-separated overpass crossings on pre-noded `.mif` segment datasets (`barnsbury_segment_lines.mif` `N = 178` and `onnut_walkable_meso_analyzed.mif` `N = 30,493`).
 - **Float64 Collinear Unit-Vector Guard & MapInfo `DATA` Token Guard (`FALS-09`)**: Normalizes 2D segment direction vectors `(ux, uy)` exclusively by `float64` `length_m` prior to computing `acos(dot)` so `float32` length truncation (`~1e-7`) cannot amplify near-collinear turn angles (`acos'(x) = -1 / sqrt(1 - x²)`) or shift `Tulip-1024` bin indices (`513`-bin semicircle queue). In addition, MapInfo `.mif` column parsing uses exact token matching (`upper == "DATA"` instead of `startswith("DATA")`) so `depthmapX` `Data_Map_Ref Float` columns never prematurely terminate schema parsing.
 - **Sparse Visited-Node Reset (`O(|V_reach|)` vs. `O(N)`)**: Tracks and sorts `visited_nodes` per source instead of scanning all `N` segments on local radii (`R400m..R2000m`), achieving **34.9× to 62.3× multi-core speedup** while preserving bit-for-bit identical floating-point accumulation order.
 

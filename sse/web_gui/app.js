@@ -1,4 +1,4 @@
-// OpenDepthmap Workstation Frontend Logic (OSSE Pro — Live CSR Backend Integration)
+// OpenDepthmap Workstation Frontend Logic (SSE Pro — Live CSR Backend Integration)
 
 // 1. Color Palettes
 const PALETTES = {

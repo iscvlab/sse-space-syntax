@@ -32,7 +32,7 @@ fn find_windows_rc() -> Option<PathBuf> {
 fn main() {
     println!("cargo:rerun-if-changed=assets/sse_icon.ico");
     println!("cargo:rerun-if-changed=assets/sse_icon.rc");
-    println!("cargo:rerun-if-changed=osse/plugins/qgis_plugin/icon.png");
+    println!("cargo:rerun-if-changed=sse/plugins/qgis_plugin/icon.png");
 
     if env::var("CARGO_CFG_TARGET_OS").unwrap_or_default() != "windows" {
         return;

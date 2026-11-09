@@ -1,5 +1,5 @@
 """
-OSSE Geospatial I/O Handlers
+SSE Geospatial I/O Handlers
 - dxf_exporter: Pure AC1018 2-point LINE DXF serializer for DepthmapX compatibility
 - mif_io: MapInfo MIF/MID parser and serializer
 - geojson_io: WGS84 and UTM47N GeoJSON reader/writer

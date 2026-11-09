@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "osse-space-syntax"
-version = "1.1.0"
+name = "sse-space-syntax"
+version = "1.1.1"
 description = "SSE — Space Syntax Engine: High-speed Rust/Python topological centrality, Brandes angular/metric segment analysis, and GIS CAD pipeline"
 readme = "README.md"
 license = { text = "MIT" }
@@ -61,7 +61,7 @@ spatial = [
 ]
 
 [project.scripts]
-osse = "osse.cli:main"
+sse = "sse.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/napattan/sse-space-syntax"
@@ -71,5 +71,5 @@ Issues = "https://github.com/napattan/sse-space-syntax/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["osse*"]
+include = ["sse*"]
 exclude = ["tests*", "examples*", "docs*"]
