@@ -1,37 +1,39 @@
-# SSE — Space Syntax Engine (`v1.1.1`)
+# SSE — Space Syntax Engine
 
 [![Release](https://img.shields.io/badge/Release-v1.1.1-121417?style=flat-square)](https://github.com/napattan/sse-space-syntax/releases/tag/v1.1.1)
-[![Standalone Binaries](https://img.shields.io/badge/Standalone-.exe_Suite_(standalone%2F)-ea580c?style=flat-square)](standalone/)
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-2563eb?style=flat-square)](https://www.python.org/downloads/)
-[![QGIS 3.22-4.x Qt6 Ready](https://img.shields.io/badge/QGIS-3.22--4.x_Qt6_Ready_(100%25_Pass)-16a34a?style=flat-square)](https://plugins.qgis.org/plugins/sse/)
-[![MCP Server: 9 Tools](https://img.shields.io/badge/MCP-sse--mcp.exe_(9_Tools)-7c3aed?style=flat-square)](https://modelcontextprotocol.io/)
-[![Upstream](https://img.shields.io/badge/Upstream-gboeing%2Fosmnx_%231410_%26_%231411-D97706?style=flat-square)](https://github.com/gboeing/osmnx/issues/1410)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B_%E2%80%A2_Numba_JIT-2563eb?style=flat-square)](https://www.python.org/downloads/)
+[![Rust 1.75+](https://img.shields.io/badge/Rust-1.75%2B_%E2%80%A2_CSR_Core-ea580c?style=flat-square)](https://www.rust-lang.org/)
+[![Standalone](https://img.shields.io/badge/Standalone-Windows_.exe_Suite-0d9488?style=flat-square)](standalone/)
+[![QGIS 3.22-4.x Qt6 Ready](https://img.shields.io/badge/QGIS-3.22--4.x_Qt6_Ready-16a34a?style=flat-square)](https://plugins.qgis.org/plugins/sse/)
 [![Lab](https://img.shields.io/badge/Lab-ISCV_%7C_Isocurve_Research_Lab_%28%40iscvlab%29-121417?style=flat-square&logo=github&logoColor=white)](https://github.com/iscvlab)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4f46e5?style=flat-square)](LICENSE)
 
-**SSE — Space Syntax Engine (`v1.1.1`)** is an open-source, dual-engine (**Native Rust + Python/QGIS**) computational platform for urban street network and architectural visibility analysis. Built as a high-performance replacement for legacy UCL `depthmapX v0.8.0`, SSE achieves **100% mathematical parity (`R² = 1.0000`)** at **35×–58× faster multi-core speed** across a standalone desktop workstation ([`standalone/sse-desktop.exe`](standalone/sse-desktop.exe)), a **QGIS 3.22–4.x (`Qt6 Ready`) Street Network Processing Plugin** ([`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)), a batch CLI ([`standalone/sse-cli.exe`](standalone/sse-cli.exe)), and an AI Model Context Protocol server ([`standalone/sse-mcp.exe`](standalone/sse-mcp.exe)).
+**SSE — Space Syntax Engine** is an open-source computational graph and spatial visibility engine (**Vectorized Python / Numba JIT / Shapely 2.0 + Native Rust CSR Core**) for urban street network and architectural layout analysis. Engineered as a modern, scriptable replacement for legacy single-threaded C++ `UCL depthmapX v0.8.0`, SSE achieves **100% mathematical parity (`R² = 1.0000`)** at **35×–58× faster multi-core speed** across three modular layers:
+1. **Modern Computational Scripts & Core Library ([`sse/`](sse/) & [`src/`](src/))**: Composable Python modules (`sse.core.*`), CLI commands (`sse clean`, `sse solve`), and native Rust Compressed Sparse Row (`CSR`) solvers for programmatic research pipelines.
+2. **Standalone Desktop Workstation & Batch CLI ([`standalone/`](standalone/))**: Zero-dependency native Windows executables ([`sse-desktop.exe`](standalone/sse-desktop.exe), [`sse-cli.exe`](standalone/sse-cli.exe), [`sse-mcp.exe`](standalone/sse-mcp.exe)) covering both citywide street networks and architectural visibility (`VGA`, `2D Isovists`, `60 FPS Visual Agents`).
+3. **QGIS 3.22–4.x (`Qt6 Ready`) Processing Plugin ([`sse/plugins/qgis_plugin/`](sse/plugins/qgis_plugin/))**: Integrated 5-algorithm street network toolbox ([`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)) with automated symbology and interactive `Intelligibility / Synergy R²` scatter plots.
 
 ---
 
 ## ⚡ TL;DR — Capabilities & Performance at a Glance
 
-- **Exact `UCL depthmapX` Mathematical Parity (`R² = 1.0000`)**: Replicates official `depthmapX v0.8.0` outputs across Angular Segment Analysis (`Tulip-1024`), Topological Axial Analysis, Visibility Graph Analysis (`VGA`), 2D Benedikt Isovists, and Gibson Visual Agents.
+- **Modern Vectorized & CSR Graph Solvers (`sse.core` & `src/lib.rs`)**: Replaces legacy pointer-heavy graph structures with cache-aligned Compressed Sparse Row (`CSRDualGraph`) arrays, `@njit(parallel=True)` Numba kernels, and `rayon` multi-core parallelism.
+- **Exact `UCL depthmapX` Mathematical Parity (`R² = 1.0000`)**: Replicates official `depthmapX v0.8.0` outputs across Angular Segment Analysis (`Tulip-1024`), Topological Axial Analysis (`16` Hillier & Hanson metrics), Visibility Graph Analysis (`VGA`), 2D Benedikt Isovists, and Gibson Visual Agents.
 - **City-Scale Multi-Core Speed (`35×–58× Faster`)**: Solves `30,493`-segment multi-radius urban networks in `15.98 s` (vs. `14.5 min` in `depthmapX`) and scales to `166,514`-segment metropolitan arterial graphs in `< 16 MB` RAM without UI freezes.
-- **Automated 5-Step OpenStreetMap Network Cleaner**: Heals raw digitizing gaps, preserves bridge/tunnel grade separation, and prunes dead-end micro-stubs prior to spatial graph construction.
-- **Focused Dual-Engine Ecosystem**: Ships a **5-algorithm QGIS Street Network Processing suite** (`sse:*` — `26.6×–56.5×` faster than `depthmapX`) alongside a zero-dependency **Standalone Rust Workstation ([`standalone/sse-desktop.exe`](standalone/))** covering both citywide street networks and architectural `VGA / 2D Isovists / 60 FPS Visual Agents`.
+- **Automated 5-Step OpenStreetMap Network Cleaner (`sse.core.cleaner`)**: Heals raw digitizing gaps via empirical `P90` raycasting, preserves bridge/tunnel grade separation, and prunes dead-end micro-stubs prior to spatial graph construction.
 
 ### Horizontal Bar Comparison (`0 ms` Render)
 
 | Evaluation Dimension | Engine Configuration | Visual Comparison Bar | Measured Result & Delta vs. Baseline |
 | :--- | :--- | :--- | :--- |
-| **1. Mathematical Parity vs. `UCL depthmapX v0.8.0` ↑** | **SSE v1.1.1 (`Rust .exe` & `QGIS Plugin`)**<br>Undirected Graph Approximation | `████████████████████` **`100.0% Exact (R² = 1.0000)`**<br>`███████████████████░` `99.6% (R² = 0.9962)` | **`max\|Δ\| = 0.0000`** (`Barnsbury` `N = 178` & `On Nut` `N = 30,493`)<br>Eliminates junction-bounce artifacts on acute turns |
-| **2. Multi-Radius Segment ASA Latency (`N = 30,493`) ↓**<br>*(Lower = Better)* | **SSE v1.1.1 (`Standalone Rust .exe`)**<br>**SSE v1.1.1 (`QGIS Plugin` All-Pairs / Fast)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`15.98 s`**<br>`█░░░░░░░░░░░░░░░░░░░` **`21.08 s (1.86 s Fast)`**<br>`████████████████████` `870.00 s (14.5 min)` | **`54.4× Faster`** (`R800, R1200, R2000, Rn`)<br>**`41.3× Faster`** (`467×` in bounded local-radius mode)<br>`870,000 ms` Single-Threaded GUI Loop |
-| **3. Urban Axial & Floorplan VGA Latency ↓**<br>*(Lower = Better)* | **SSE v1.1.1 (`Rust .exe` Axial / VGA)**<br>**SSE v1.1.1 (`QGIS Plugin` Axial)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`1.39 s Axial · 134 ms VGA`**<br>`█░░░░░░░░░░░░░░░░░░░` **`1.82 s Axial`**<br>`████████████████████` `48.50 s Axial · 4,800 ms VGA` | **`34.9×–35.8× Faster`** (`30,493` axial lines & `2,101` VGA cells)<br>**`26.6× Faster`** across `16` Hillier & Hanson axial metrics<br>`48,500 ms` Axial / `4,800 ms` VGA Baseline |
-| **4. Metropolis Capacity (`Bangkok`, `N = 166,514`) ↑** | **SSE v1.1.1 (`Rust .exe` & `QGIS Plugin`)**<br>UCL depthmapX v0.8.0 C++ Baseline | `████████████████████` **`100.0% Solved (16.69 s)`**<br>`░░░░░░░░░░░░░░░░░░░░` `0.0% (DNF / Freeze)` | **`< 16 MB` CSR RAM** (`16.69 s` Rust · `21.62 s` QGIS, `R² = 1.0000`)<br>`> 13.8B` `O(N²)` pairs (Application freeze) |
+| **1. Mathematical Parity vs. `UCL depthmapX v0.8.0` ↑** | **SSE (`Python/Numba Scripts` & `Rust CSR`)**<br>Undirected Graph Approximation | `████████████████████` **`100.0% Exact (R² = 1.0000)`**<br>`███████████████████░` `99.6% (R² = 0.9962)` | **`max\|Δ\| = 0.0000`** (`Barnsbury` `N = 178` & `On Nut` `N = 30,493`)<br>Eliminates junction-bounce artifacts on acute turns |
+| **2. Multi-Radius Segment ASA Latency (`N = 30,493`) ↓**<br>*(Lower = Better)* | **SSE (`Rust CSR Core` / `Standalone .exe`)**<br>**SSE (`Python/Numba Scripts` & `QGIS`)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`15.98 s`**<br>`█░░░░░░░░░░░░░░░░░░░` **`21.08 s (1.86 s Fast)`**<br>`████████████████████` `870.00 s (14.5 min)` | **`54.4× Faster`** (`R800, R1200, R2000, Rn`)<br>**`41.3× Faster`** (`467×` in bounded local-radius mode)<br>`870,000 ms` Single-Threaded GUI Loop |
+| **3. Urban Axial & Floorplan VGA Latency ↓**<br>*(Lower = Better)* | **SSE (`Rust CSR Core` Axial / VGA)**<br>**SSE (`Python/Numba Scripts` Axial)**<br>UCL depthmapX v0.8.0 C++ Baseline | `█░░░░░░░░░░░░░░░░░░░` **`1.39 s Axial · 134 ms VGA`**<br>`█░░░░░░░░░░░░░░░░░░░` **`1.82 s Axial`**<br>`████████████████████` `48.50 s Axial · 4,800 ms VGA` | **`34.9×–35.8× Faster`** (`30,493` axial lines & `2,101` VGA cells)<br>**`26.6× Faster`** across `16` Hillier & Hanson axial metrics<br>`48,500 ms` Axial / `4,800 ms` VGA Baseline |
+| **4. Metropolis Capacity (`Bangkok`, `N = 166,514`) ↑** | **SSE (`Rust CSR` & `Python/Numba`)**<br>UCL depthmapX v0.8.0 C++ Baseline | `████████████████████` **`100.0% Solved (16.69 s)`**<br>`░░░░░░░░░░░░░░░░░░░░` `0.0% (DNF / Freeze)` | **`< 16 MB` CSR RAM** (`16.69 s` Rust · `21.62 s` Python, `R² = 1.0000`)<br>`> 13.8B` `O(N²)` pairs (Application freeze) |
 
 ---
 
-## 📊 Visual Parity & Benchmark Suites (`UCL depthmapX v0.8.0` vs. `SSE v1.1.1`)
+## 📊 Visual Parity & Benchmark Suites (`UCL depthmapX v0.8.0` vs. `SSE`)
 
 | **1. `UCL Barnsbury` Angular Segment Analysis (`Tulip-1024` · `N = 178` · `R² = 1.000000` · `57.8×` Faster)** |
 | :---: |
@@ -49,36 +51,41 @@
 | :---: |
 | ![Bangkok Citywide Arterials Parity](docs/benchmarks/comparison_04_benchmark_summary_and_agents.png) |
 
-| **5. `Architectural Spatial Visibility` (`VGA + 2D Isovists + Gibson Visual Agents` · `N = 2,101` · `R² = 1.000000` · `35.8×` Faster · `Standalone .exe` Only)** |
+| **5. `Architectural Spatial Visibility` (`VGA + 2D Isovists + Gibson Visual Agents` · `N = 2,101` · `R² = 1.000000` · `35.8×` Faster)** |
 | :---: |
 | ![Architectural Spatial Visibility Parity](docs/benchmarks/comparison_05_spatial_vga_isovists_agents.png) |
 
 ### 3-Way Execution Speed & Mathematical Parity Summary
 
-| Benchmark Suite & Empirical Dataset | Scale (`N`) | `UCL depthmapX v0.8.0` | `SSE QGIS Plugin v1.1.1` | `SSE Rust .exe v1.1.1` | Speedup (`QGIS / Rust`) | Parity (`R²` & `max\|Δ\|`) |
+| Benchmark Suite & Empirical Dataset | Scale (`N`) | `UCL depthmapX v0.8.0` | `SSE Python / QGIS` | `SSE Rust CSR Core` | Speedup (`Python / Rust`) | Parity (`R²` & `max\|Δ\|`) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
 | **1. UCL Barnsbury Segment ASA (`Tulip-1024`)** | `178` segs (`R400 + Rn`) | `48.00 ms` | **`0.85 ms`** | **`0.83 ms`** | **`56.5×` / `57.8×`** | **`R² = 1.000000`** (`0.0000`) |
 | **2. Bangkok On Nut Multi-Radius ASA (`Tulip-1024`)** | `30,493` segs (`R800..Rn`) | `870.00 s` | **`21.08 s`** (`1.86 s` Fast) | **`15.98 s`** | **`41.3×` / `54.4×`** | **`R² = 1.000000`** (`0.0000`) |
 | **3. Bangkok On Nut Topological Axial (`16` Metrics)** | `30,493` lines (`Rn, R3, R5`) | `48.50 s` | **`1.82 s`** | **`1.39 s`** | **`26.6×` / `34.9×`** | **`R² = 1.000000`** (`0.0000`) |
-| **4. Bangkok Metropolis Citywide Arterials (`CSR`)** | `166,514` segs (`R800..Rn`) | `DNF / Freeze` | **`21.62 s`** (`6.12 s` R2k) | **`16.69 s`** (`4.49 s` R2k) | **`1.29×` (`Rust/QGIS`)** | **`R² = 1.000000`** (`< 16 MB`) |
-| **5. Architectural Spatial Visibility (`VGA + Isovists + Agents`)** | `2,101` cells (`1.04M` edges) | `4,800.0 ms` | *`N/A (Street Network Only)`* | **`134.14 ms`** | **`35.8×` (`Rust .exe`)** | **`R² = 1.000000`** (`0.0001`) |
+| **4. Bangkok Metropolis Citywide Arterials (`CSR`)** | `166,514` segs (`R800..Rn`) | `DNF / Freeze` | **`21.62 s`** (`6.12 s` R2k) | **`16.69 s`** (`4.49 s` R2k) | **`1.29×` (`Rust/Py`)** | **`R² = 1.000000`** (`< 16 MB`) |
+| **5. Architectural Spatial Visibility (`VGA + Isovists + Agents`)** | `2,101` cells (`1.04M` edges) | `4,800.0 ms` | **`574.0 ms`** *(Python Core)* | **`134.14 ms`** | **`35.8×` (`Rust CSR`)** | **`R² = 1.000000`** (`0.0001`) |
 
 ---
 
-## 1. Architecture & Core Modules
+## 1. Architecture & Core Computational Modules
 
-SSE (`v1.1.1`) provides identical Space Syntax formulations across two purpose-built engines:
-1. **QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Plugin ([`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)), Python API (`sse`) & Grasshopper C# Component**: Focused 100% on **5 GIS Street Network Algorithms** (`26.6×–56.5×` faster than `depthmapX`), featuring automated symbology, interactive scatter plots (`Intelligibility R²` & `Synergy R²`), and GeoPackage/GeoJSON/DXF/MIF I/O.
-2. **Standalone Native Rust Workstation ([`standalone/sse-desktop.exe`](standalone/sse-desktop.exe)), CLI ([`standalone/sse-cli.exe`](standalone/sse-cli.exe)) & MCP Server ([`standalone/sse-mcp.exe`](standalone/sse-mcp.exe))**: Zero-dependency desktop GUI, batch solver, and 9-tool JSON-RPC `2.0` MCP server covering all 5 street network algorithms **plus** high-speed **Architectural Spatial Visibility (`VGA`, `2D Benedikt Isovists`, and `60 FPS Gibson Visual Agents`)**.
+SSE is organized into three progressive execution tiers—starting from **Modern Computational Scripts & Core Solvers** down to desktop and GIS host integrations:
 
-| Analysis Module | Engine Availability & ID (`sse:*`) | Target Input | Primary Outputs |
+1. **Modern Computational Scripts & Core Engine ([`sse/core/`](sse/core/), [`sse/cli.py`](sse/cli.py) & [`src/lib.rs`](src/lib.rs))**:
+   - Pure, scriptable Python & Numba JIT modules (`cleaner.py`, `graph.py`, `solvers_segment.py`, `solvers_axial.py`, `solvers_natural_roads.py`, `solvers_vga.py`, `solvers_agents.py`, `osm_downloader.py`) paired with the native Rust CSR library (`src/lib.rs`) and GeoJSON/GeoPackage/DXF/MIF I/O handlers (`sse/io_handlers/`).
+2. **Standalone Native Rust Workstation & Batch CLI ([`standalone/`](standalone/))**:
+   - Zero-dependency desktop workstation GUI ([`standalone/sse-desktop.exe`](standalone/sse-desktop.exe)), headless batch & benchmark runner ([`standalone/sse-cli.exe`](standalone/sse-cli.exe)), and 9-tool JSON-RPC `2.0` MCP server ([`standalone/sse-mcp.exe`](standalone/sse-mcp.exe)).
+3. **Host GIS & CAD Integrations ([`sse/plugins/`](sse/plugins/))**:
+   - **QGIS 3.22–4.x (`Qt5`/`Qt6 Ready`) Street Network Plugin** ([`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)) focusing on the 5 street-network algorithms (`sse:*`), plus the **Grasshopper RhinoCommon C#** `Parallel.For` solver component.
+
+| Computational Module | Core Script (`sse.core.*` / `src/lib.rs`) | Standalone & Host Availability | Primary Outputs |
 | :--- | :--- | :--- | :--- |
-| **1. OSM Watertight Cleaner** | `QGIS Plugin` (`sse:prepare_osm_network`) + `Rust .exe` | Raw OSM / CAD centerlines | Watertight, grade-separated network + stub pruning |
-| **2. Angular Segment (ASA)** | `QGIS Plugin` (`sse:angular_segment_analysis`) + `Rust .exe` | Segment network (`angular`/`metric`/`topo`) | Multi-radius `NACH`, `NAIN`, `Choice`, `Integration` & `R²` |
-| **3. Origin Step Depth** | `QGIS Plugin` (`sse:origin_step_depth`) + `Rust .exe` | Street network + origin points/lines | Angular, metric (`m`), and topological step depth |
-| **4. Topological Axial** | `QGIS Plugin` (`sse:axial_analysis`) + `Rust .exe` | Axial lines (`n, R3, R5`) | `16` Hillier & Hanson metrics (`Integration [HH]`, `RRA`, `Entropy`) |
-| **5. Natural Roads** | `QGIS Plugin` (`sse:natural_roads`) + `Rust .exe` | Street segments (`max_deflection=20°`) | Gestalt continuity arterial strokes (`sinuosity` & `circuity`) |
-| **6. Spatial Visibility (`VGA / Isovists / Agents`)** | **Standalone `Rust .exe` / `CLI` / `MCP` Only** | Architectural floorplans & plazas (`DXF`/`MIF`) | `Visual_Integration [HH]`, `2D Isovist_Area`, `60 FPS Agent Gate_Counts` |
+| **1. OSM Watertight Cleaner** | `cleaner.py` · `osm_downloader.py` | `Python CLI` · `Standalone .exe` · `QGIS` (`sse:prepare_osm_network`) | Watertight, grade-separated network + stub pruning |
+| **2. Angular Segment (ASA)** | `solvers_segment.py` · `graph.py` | `Python CLI` · `Standalone .exe` · `QGIS` (`sse:angular_segment_analysis`) | Multi-radius `NACH`, `NAIN`, `Choice`, `Integration` & `R²` |
+| **3. Origin Step Depth** | `solvers_segment.py` (`solve_origin_step_depth`) | `Python API` · `Standalone .exe` · `QGIS` (`sse:origin_step_depth`) | Angular, metric (`m`), and topological step depth |
+| **4. Topological Axial** | `solvers_axial.py` | `Python API` · `Standalone .exe` · `QGIS` (`sse:axial_analysis`) | `16` Hillier & Hanson metrics (`Integration [HH]`, `RRA`, `Entropy`) |
+| **5. Natural Roads** | `solvers_natural_roads.py` | `Python API` · `Standalone .exe` · `QGIS` (`sse:natural_roads`) | Gestalt continuity arterial strokes (`sinuosity` & `circuity`) |
+| **6. Spatial Visibility (`VGA / Isovists / Agents`)** | `solvers_vga.py` · `solvers_agents.py` · `src/lib.rs` | `Python API` · `Standalone .exe` (`sse-desktop` / `sse-cli` / `sse-mcp`) | `Visual_Integration [HH]`, `2D Isovist_Area`, `60 FPS Agent Gate_Counts` |
 
 ### Diagram A: SSE Core Engine & Multi-Platform Ecosystem
 
@@ -87,13 +94,13 @@ SSE (`v1.1.1`) provides identical Space Syntax formulations across two purpose-b
 flowchart LR
     subgraph Canvas [" "]
         In["Raw GIS / CAD Input (GeoJSON / GPKG / DXF / MIF)"] --> Heal["P90 Raycast + Grade Separation + Stub Prune"]
-        Heal --> Dual{"Angular Dual Graph + CSR Solver"}
+        Heal --> Dual{"Modern CSR Dual Graph + Tulip-1024 Core"}
 
-        subgraph Platforms ["Host Integrations and Interfaces"]
-            P0["Native Rust Workstation + CLI: standalone/sse-desktop.exe & sse-cli.exe (Network + Spatial VGA)"]
-            P1["Python API + CLI: sse clean / solve (Active)"]
-            P2["QGIS 3.22-4.x Processing Toolbox: 5 Street Network Algos (Active)"]
-            P3["Grasshopper C# Parallel.For Component (Active)"]
+        subgraph Platforms ["Execution Interfaces (Scripts -> Standalone -> GIS/CAD)"]
+            P0["1. Modern Python Scripts + CLI: sse.core / sse clean / sse solve (Active)"]
+            P1["2. Standalone Rust Workstation + CLI: standalone/sse-desktop.exe & sse-cli.exe (Active)"]
+            P2["3. QGIS 3.22-4.x Processing Toolbox: 5 Street Network Algos (Active)"]
+            P3["4. Grasshopper C# Parallel.For Component (Active)"]
         end
 
         Dual --> P0
@@ -149,46 +156,56 @@ flowchart LR
 
 ## 2. Quick Start & Installation
 
-### A. Standalone Rust Workstation (`standalone/sse-desktop.exe`), CLI & MCP Server
-Pre-compiled Windows executables live directly in the **[`standalone/`](standalone/)** folder of this repository (and on **[GitHub Releases (`v1.1.1`)](https://github.com/napattan/sse-space-syntax/releases/tag/v1.1.1)**):
-
-```powershell
-# Run directly from the standalone/ folder (zero dependencies required)
-.\standalone\sse-desktop.exe
-.\standalone\sse-cli.exe benchmark
-.\standalone\sse-mcp.exe
-```
-
-Or build from source with Cargo:
+### A. Modern Python Scripts, Library API & CLI (`sse`)
+Install the `sse` Python package in editable mode to run the computational scripts, CLI commands, or Python API directly:
 
 ```bash
 git clone https://github.com/napattan/sse-space-syntax.git
 cd sse-space-syntax
-
-# Launch standalone interactive Space Syntax workstation GUI
-cargo run --release --bin sse-desktop
-
-# Run 9-suite mathematical parity benchmark verification
-cargo run --release --bin sse-cli -- benchmark
-
-# Start 9-tool JSON-RPC 2.0 stdio MCP server
-cargo run --release --bin sse-mcp
-```
-
-### B. QGIS 3.22–4.x (`Qt6 Ready`) Street Network Plugin Installation
-1. Download **[`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)** (or install directly from the official **[QGIS Plugin Repository (`plugins.qgis.org/plugins/sse/`)](https://plugins.qgis.org/plugins/sse/)**).
-2. In QGIS, open **Plugins → Manage and Install Plugins → Install from ZIP**, select `sse_v1.1.1.zip`, and click **Install Plugin**.
-3. Access the toolbar buttons (**5-Step Network Cleaner**, **Intelligibility/Synergy Scatter Plot**) and all 5 street network algorithms under **Processing Toolbox → SSE — Space Syntax Engine**.
-
-### C. Python Package & CLI (`sse`)
-
-```bash
 pip install -e .
 
-# Clean raw street network & solve multi-radius NACH / NAIN
+# 1. Clean raw street network & solve multi-radius NACH / NAIN via CLI
 sse clean --input raw_roads.geojson --output clean_roads.geojson --snap 3.0 --rungs
 sse solve --input clean_roads.geojson --output analyzed_roads.geojson --radii 800,2000 --include-global
+
+# 2. Run the self-contained benchmark & verification scripts
+python examples/run_mini_network.py
+python -m pytest tests/ -q
 ```
+
+Or import the vectorized solvers directly in Python scripts:
+
+```python
+from sse.core.cleaner import clean_network_adaptive_watertight
+from sse.core.solvers_segment import solve_angular_segment_analysis
+from sse.core.solvers_axial import solve_axial_analysis
+from sse.core.solvers_natural_roads import build_natural_roads
+
+# Clean raw LineStrings and solve exact Tulip-1024 multi-radius NACH / NAIN
+cleaned_lines, report = clean_network_adaptive_watertight(raw_lines, mode="auto")
+asa_results = solve_angular_segment_analysis(cleaned_lines, radii=[400, 800, 1200, 2000, "n"], tulip_bins=1024)
+```
+
+### B. Standalone Rust Workstation & Batch CLI ([`standalone/`](standalone/))
+Pre-compiled Windows executables live directly in the **[`standalone/`](standalone/)** folder of this repository (or on **[GitHub Releases (`v1.1.1`)](https://github.com/napattan/sse-space-syntax/releases/tag/v1.1.1)**):
+
+```powershell
+# Run directly from standalone/ (zero dependencies required)
+.\standalone\sse-desktop.exe
+.\standalone\sse-cli.exe benchmark
+```
+
+Or compile the native Rust workspace from source with Cargo:
+
+```bash
+cargo run --release --bin sse-desktop
+cargo run --release --bin sse-cli -- benchmark
+```
+
+### C. QGIS 3.22–4.x (`Qt6 Ready`) Street Network Plugin
+1. Download **[`standalone/sse_v1.1.1.zip`](standalone/sse_v1.1.1.zip)** (or install from the [QGIS Plugin Repository](https://plugins.qgis.org/plugins/sse/)).
+2. In QGIS, open **Plugins → Manage and Install Plugins → Install from ZIP**, select `sse_v1.1.1.zip`, and click **Install Plugin**.
+3. Access the toolbar buttons (**5-Step Network Cleaner**, **Intelligibility/Synergy Scatter Plot**) and all 5 street network algorithms under **Processing Toolbox → SSE — Space Syntax Engine**.
 
 ---
 
@@ -207,33 +224,34 @@ sse solve --input clean_roads.geojson --output analyzed_roads.geojson --radii 80
 
 ```text
 sse-space-syntax/
-├── standalone/                   # Pre-compiled Windows Executables & QGIS Plugin Archive
+├── sse/                          # 1. Modern Python Computational Scripts, Solvers & Host Plugins
+│   ├── core/                     # CSRDualGraph, Numba Tulip-1024, Axial, Natural Roads, VGA, Cleaner
+│   ├── io_handlers/              # GeoJSON, GeoPackage, AutoCAD AC1018 DXF & MapInfo MIF/MID I/O
+│   ├── plugins/
+│   │   ├── qgis_plugin/          # QGIS 3.22-4.x (Qt6 Ready) plugin (5 street network algorithms)
+│   │   └── grasshopper_csharp/   # RhinoCommon C# Parallel.For solver component
+│   └── cli.py                    # Python CLI entry point (`sse clean`, `sse solve`)
+├── src/                          # 2. Native Rust CSR Solvers, Workstation GUI & CLI Source
+│   ├── lib.rs                    # Rust CSR solvers (ASA, Axial, Strokes, VGA, Isovist, Agents)
+│   └── bin/
+│       ├── sse_desktop.rs        # Pure-Rust egui/eframe standalone workstation GUI
+│       ├── sse_cli.rs            # Headless CLI & 9-suite benchmark self-test runner
+│       └── sse_mcp.rs            # 9-tool JSON-RPC 2.0 stdio MCP server + 127.0.0.1:9884 GUI bridge
+├── standalone/                   # 3. Pre-compiled Windows Executables & QGIS Plugin Archive
 │   ├── sse-desktop.exe           # Standalone Rust Workstation GUI (9.41 MB)
 │   ├── sse-cli.exe               # Headless CLI & 9-suite benchmark runner (1.81 MB)
 │   ├── sse-mcp.exe               # 9-tool JSON-RPC 2.0 stdio MCP server (4.22 MB)
 │   ├── sse_v1.1.1.zip            # Official QGIS 3.22-4.x (Qt6 Ready) plugin archive
 │   └── README.md                 # Standalone binaries quick reference
-├── src/                          # Native Rust Standalone Workstation, CLI & MCP Source
-│   ├── bin/
-│   │   ├── sse_desktop.rs        # Pure-Rust egui/eframe standalone workstation GUI
-│   │   ├── sse_cli.rs            # Headless CLI & 9-suite benchmark self-test runner
-│   │   └── sse_mcp.rs            # 9-tool JSON-RPC 2.0 stdio MCP server + 127.0.0.1:9884 GUI TCP controller
-│   └── lib.rs                    # Rust CSR solvers (ASA, Axial, Strokes, VGA, Isovist, Agents)
-├── sse/
-│   ├── core/                     # Python CSRDualGraph, Numba Tulip-1024, Axial, Strokes, Cleaner
-│   ├── io_handlers/              # GeoJSON, GeoPackage, AutoCAD AC1018 DXF & MapInfo MIF/MID I/O
-│   ├── plugins/
-│   │   ├── qgis_plugin/          # QGIS 3.22-4.x (Qt6 Ready) plugin (5 street network algorithms)
-│   │   └── grasshopper_csharp/   # RhinoCommon C# Parallel.For solver component
-│   └── cli.py                    # Python CLI entry point (`sse`)
+├── scripts/                      # Benchmark & figure generation scripts
+├── examples/                     # UCL Barnsbury, Gallery & Multi-Room reference datasets
+├── tests/                        # Pytest verification & analytical toy benchmark suite (20/20)
 ├── docs/
 │   ├── benchmarks/               # 5 Academic 3-Panel Comparison Plates (depthmapX vs. SSE)
 │   ├── RESEARCH_SPACE_SYNTAX_ENGINE.md # Deep mathematical study & forensic parity matrix
 │   └── PUBLISHING_GUIDE.md       # Release & deployment guide
-├── examples/                     # UCL Barnsbury, Gallery & Multi-Room reference datasets
-├── tests/                        # Pytest verification & analytical toy benchmark suite
-├── Cargo.toml                    # Native Rust workspace manifest (v1.1.1)
-├── pyproject.toml                # PEP 621 Python package specification (v1.1.1)
+├── Cargo.toml                    # Native Rust workspace manifest
+├── pyproject.toml                # PEP 621 Python package specification (`sse-space-syntax`)
 └── LICENSE                       # MIT License
 ```
 
@@ -250,7 +268,7 @@ sse-space-syntax/
   - **Visibility Graph Analysis (VGA)**: [`salalib/vgamodules/vgavisualglobal.cpp`](https://github.com/SpaceGroupUCL/depthmapX/blob/master/salalib/vgamodules/vgavisualglobal.cpp) and [`salalib/vgamodules/vgavisuallocal.cpp`](https://github.com/SpaceGroupUCL/depthmapX/blob/master/salalib/vgamodules/vgavisuallocal.cpp).
   - **Analytical 2D Isovists & Visual Agents**: [`salalib/isovist.cpp`](https://github.com/SpaceGroupUCL/depthmapX/blob/master/salalib/isovist.cpp), [`salalib/pointdata.h`](https://github.com/SpaceGroupUCL/depthmapX/blob/master/salalib/pointdata.h) (`whichbin()` 32-bin tangent quantization), and [`salalib/agents/`](https://github.com/SpaceGroupUCL/depthmapX/tree/master/salalib/agents).
 - **UCL Space Syntax Toolkit for QGIS (`SpaceGroupUCL/qgisSpaceSyntaxToolkit`)**: [GitHub Repository (`SpaceGroupUCL/qgisSpaceSyntaxToolkit`)](https://github.com/SpaceGroupUCL/qgisSpaceSyntaxToolkit) (Jorge Gil, Tasos Varoudis, Kayvan Karimi & Alan Penn).
-- **OSMnx (`gboeing/osmnx`)**: [GitHub Repository (`gboeing/osmnx`)](https://github.com/gboeing/osmnx) · [Documentation](https://osmnx.readthedocs.io/) · [Upstream Issue `#1410`](https://github.com/gboeing/osmnx/issues/1410) & [PR `#1411`](https://github.com/gboeing/osmnx/pull/1411) (Geoff Boeing — OpenStreetMap street network extraction, topology simplification, and closed-loop circuity/sinuosity handling).
+- **OSMnx (`gboeing/osmnx`)**: [GitHub Repository (`gboeing/osmnx`)](https://github.com/gboeing/osmnx) · [Documentation](https://osmnx.readthedocs.io/) (Geoff Boeing — OpenStreetMap street network extraction and topology simplification).
 - **PySAL `momepy` (`pysal/momepy`) & `neatnet` (`geopandas/neatnet`)**: [GitHub Repository (`pysal/momepy`)](https://github.com/pysal/momepy) · [GitHub Repository (`geopandas/neatnet`)](https://github.com/geopandas/neatnet) (Martin Fleischmann et al. — Urban morphometrics and continuity stroke simplification).
 - **Core Scientific & UI Libraries**: [Shapely / GEOS (`shapely/shapely`)](https://github.com/shapely/shapely) · [SciPy (`scipy/scipy`)](https://github.com/scipy/scipy) · [Numba (`numba/numba`)](https://github.com/numba/numba) · [Rayon (`rayon-rs/rayon`)](https://github.com/rayon-rs/rayon) · [egui (`emilk/egui`)](https://github.com/emilk/egui).
 
@@ -259,7 +277,7 @@ sse-space-syntax/
 - **Hillier, B., Yang, T., & Turner, A. (2012)**. Normalising least angle choice in Depthmap (`NACH` & `NAIN`). *Journal of Space Syntax*, 3(2), 155–193.
 - **Turner, A. (2001)**. Angular analysis. *Proceedings of the 3rd International Space Syntax Symposium*, Atlanta, 30.1–30.11.
 - **Turner, A. (2007)**. From axial to road-centre lines: a new representation for space syntax and a new model of route choice for transport network analysis. *Environment and Planning B*, 34(3), 539–555. ([DOI: `10.1068/b32067`](https://doi.org/10.1068/b32067))
-- **Brandes, U. (2001)**. A faster algorithm for betweenness centrality. *Journal of Mathematical Sociology*, 25(2), 163–177. ([DOI: `10.1080/0022250X.2001.9990249`](https://doi.org/10.1080/0022250X.2001.9990249))
+- **Brandes, U. (2001)**. A faster algorithm for betweenness centrality. *Journal of Mathematical Sociology*, 25(2), 163–177. ([DOI: `10.1080/0022250X.2001.9990249`](https://doi.org/10.1068/0022250X.2001.9990249))
 - **Turner, A., Doxa, M., O'Sullivan, D., & Penn, A. (2001)**. From isovists to visibility graphs: a methodology for the analysis of architectural space. *Environment and Planning B*, 28(1), 103–121. ([DOI: `10.1068/b2684`](https://doi.org/10.1068/b2684))
 - **Turner, A., & Penn, A. (2002)**. Encoding natural movement as an agent-based system. *Environment and Planning B*, 29(4), 473–490. ([DOI: `10.1068/b12850`](https://doi.org/10.1068/b12850))
 - **Benedikt, M. L. (1979)**. To take hold of space: isovists and isovist fields. *Environment and Planning B*, 6(1), 47–65. ([DOI: `10.1068/b060047`](https://doi.org/10.1068/b060047))
