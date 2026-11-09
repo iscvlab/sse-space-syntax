@@ -106,14 +106,14 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
                 "Input Street Segments",
-                [QgsProcessing.TypeVectorLine]
+                [QgsProcessing.SourceType.TypeVectorLine]
             )
         )
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.ANGLE_THRESHOLD,
                 "Maximum Deflection Angle Threshold (Degrees)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=20.0,
                 minValue=1.0,
                 maxValue=90.0
@@ -131,7 +131,7 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.SNAP_TOLERANCE,
                 "Endpoint Snap Tolerance (meters) [when Clean Network enabled]",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=1.5,
                 minValue=0.0,
                 maxValue=50.0,
@@ -156,14 +156,14 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
                 "Concatenated Natural Road Strokes",
-                type=QgsProcessing.TypeVectorLine
+                type=QgsProcessing.SourceType.TypeVectorLine
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_CSV,
                 "Detailed Stroke Attribute Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -305,7 +305,7 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
             self.OUTPUT,
             context,
             fields,
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
             out_crs
         )
 
@@ -317,7 +317,7 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_CSV,
                 context,
                 fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem()
             )
 
@@ -343,11 +343,11 @@ class SSENaturalRoadsAlgorithm(QgsProcessingAlgorithm):
                 feat = QgsFeature(fields)
                 feat.setGeometry(qgs_geom)
                 feat.setAttributes(attrs)
-                sink.addFeature(feat, QgsFeatureSink.FastInsert)
+                sink.addFeature(feat, QgsFeatureSink.Flag.FastInsert)
             if table_sink is not None:
                 t_feat = QgsFeature(fields)
                 t_feat.setAttributes(attrs)
-                table_sink.addFeature(t_feat, QgsFeatureSink.FastInsert)
+                table_sink.addFeature(t_feat, QgsFeatureSink.Flag.FastInsert)
 
         self._dest_id = dest_id
         self._apply_symbology = apply_symbology

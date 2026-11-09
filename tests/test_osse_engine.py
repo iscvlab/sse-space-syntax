@@ -433,3 +433,52 @@ def test_osm_pipeline_and_prenoded_guard_parity():
     segs = explode_to_2point_segments(cleaned)
     assert is_prenoded_segment_map(segs) is True
     assert len(explode_to_2point_segments(segs)) == len(segs)
+
+
+def test_qgis_portal_bandit_and_qt6_scoped_enums_guard():
+    """Verify URL scheme validation (B310), zero try-except-continue (B112), and Qt6 scoped Qgs* enums."""
+    import ast
+    import pathlib
+    import pytest
+    from osse.core.osm_downloader import _validate_http_url, fetch_osm_network
+
+    assert _validate_http_url("https://overpass-api.de/api/interpreter") == "https://overpass-api.de/api/interpreter"
+    for bad_url in ("file:///etc/passwd", "ftp://overpass-api.de/api", "custom://host/path", ""):
+        with pytest.raises(ValueError):
+            _validate_http_url(bad_url)
+    with pytest.raises(ValueError):
+        fetch_osm_network((100.59, 13.70, 100.60, 13.71), custom_endpoint="file:///etc/passwd")
+
+    plugin_dir = pathlib.Path(__file__).resolve().parent.parent / "osse" / "plugins" / "qgis_plugin"
+    forbidden_unscoped = {
+        ("QgsWkbTypes", "LineString"),
+        ("QgsWkbTypes", "NoGeometry"),
+        ("QgsProcessing", "TypeVectorLine"),
+        ("QgsProcessing", "TypeVectorPolygon"),
+        ("QgsProcessing", "TypeVectorAnyGeometry"),
+        ("QgsProcessing", "TypeVector"),
+        ("QgsProcessingParameterNumber", "Double"),
+        ("QgsProcessingParameterField", "Numeric"),
+        ("QgsFeatureSink", "FastInsert"),
+    }
+    for py_file in plugin_dir.rglob("*.py"):
+        tree = ast.parse(py_file.read_text(encoding="utf-8"), filename=str(py_file))
+        for parent in ast.walk(tree):
+            if isinstance(parent, ast.ExceptHandler):
+                is_broad = parent.type is None or (
+                    isinstance(parent.type, ast.Name)
+                    and parent.type.id in ("Exception", "BaseException")
+                )
+                assert not (
+                    is_broad and len(parent.body) == 1 and isinstance(parent.body[0], ast.Continue)
+                ), f"Bandit B112 try_except_continue found in {py_file}:{parent.lineno}"
+            for node in ast.iter_child_nodes(parent):
+                if (
+                    isinstance(node, ast.Attribute)
+                    and isinstance(node.value, ast.Name)
+                    and not isinstance(parent, ast.Attribute)
+                ):
+                    assert (node.value.id, node.attr) not in forbidden_unscoped, (
+                        f"Unscoped Qt6 enum {node.value.id}.{node.attr} in {py_file}:{node.lineno}"
+                    )
+

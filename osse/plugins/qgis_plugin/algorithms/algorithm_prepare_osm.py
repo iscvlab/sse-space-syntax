@@ -119,12 +119,16 @@ def _read_boundary_union(
                 pgeom = transform_qgs_geometry(pgeom, xform)
             else:
                 pgeom.transform(xform)
-        try:
-            sp = shapely_wkt.loads(pgeom.asWkt())
-            if sp is not None and not sp.is_empty:
-                polys.append(sp)
-        except Exception:
+        wkt_str = pgeom.asWkt()
+        if not wkt_str:
             continue
+        sp = None
+        try:
+            sp = shapely_wkt.loads(wkt_str)
+        except (ValueError, TypeError, Exception):
+            sp = None
+        if sp is not None and not sp.is_empty:
+            polys.append(sp)
     if not polys:
         return None
     return unary_union(polys)
@@ -197,7 +201,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
                 self.INPUT,
                 "Raw Input Line Layer "
                 "[optional when downloading from OpenStreetMap below]",
-                [QgsProcessing.TypeVectorLine],
+                [QgsProcessing.SourceType.TypeVectorLine],
                 optional=True,
             )
         )
@@ -221,7 +225,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
                 self.OSM_BOUNDARY_LAYER,
                 "Optional Boundary Polygon Layer "
                 "(Clip OSM Network to Exact Polygon)",
-                [QgsProcessing.TypeVectorPolygon],
+                [QgsProcessing.SourceType.TypeVectorPolygon],
                 optional=True,
             )
         )
@@ -264,7 +268,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.EXTEND_DISTANCE,
                 "Manual Extension Distance (meters) [Manual Mode only]",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=15.0,
                 minValue=1.0,
                 maxValue=50.0,
@@ -281,7 +285,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.MIN_STUB_LEN,
                 "Micro-Stub Pruning Threshold (meters)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0.5,
                 minValue=0.1,
                 maxValue=5.0,
@@ -291,7 +295,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.DEAD_END_STUB_LEN,
                 "Remove Dead-End Stubs Shorter Than (meters, 0 = disabled)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0.0,
                 minValue=0.0,
                 maxValue=500.0,
@@ -330,14 +334,14 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
                 "Cleansed & Noded Space Syntax Segments",
-                type=QgsProcessing.TypeVectorLine,
+                type=QgsProcessing.SourceType.TypeVectorLine,
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_CSV,
                 "Network Cleaning Audit Summary Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True,
             )
@@ -659,7 +663,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
             self.OUTPUT,
             context,
             fields,
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
             out_crs,
         )
 
@@ -675,7 +679,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
                 feat = QgsFeature(fields)
                 feat.setGeometry(qgs_geom)
                 feat.setAttributes([i, float(round(s.length, 2))])
-                sink.addFeature(feat, QgsFeatureSink.FastInsert)
+                sink.addFeature(feat, QgsFeatureSink.Flag.FastInsert)
 
         out_dict = {self.OUTPUT: dest_id}
 
@@ -688,7 +692,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_CSV,
                 context,
                 csv_fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem(),
             )
             if csv_sink is not None:
@@ -746,7 +750,7 @@ class SSEPrepareOSMAlgorithm(QgsProcessingAlgorithm):
                 for m_key, m_val in audit_rows:
                     c_feat = QgsFeature(csv_fields)
                     c_feat.setAttributes([m_key, m_val])
-                    csv_sink.addFeature(c_feat, QgsFeatureSink.FastInsert)
+                    csv_sink.addFeature(c_feat, QgsFeatureSink.Flag.FastInsert)
             if csv_dest_id:
                 out_dict[self.OUTPUT_CSV] = csv_dest_id
 

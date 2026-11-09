@@ -95,6 +95,17 @@ def _normalize_mode(network_mode: str) -> str:
     return mode
 
 
+def _validate_http_url(url: str) -> str:
+    """Validate that a URL uses an explicit http/https scheme and has a network host."""
+    cleaned = str(url or "").strip()
+    parsed = urllib.parse.urlparse(cleaned)
+    if parsed.scheme not in ("https", "http") or not parsed.netloc:
+        raise ValueError(
+            f"Disallowed URL scheme in '{url}': only 'https://' and 'http://' are permitted."
+        )
+    return cleaned
+
+
 def _validate_and_clamp_bbox(bbox_wgs84: Tuple[float, float, float, float]) -> Tuple[float, float, float, float]:
     if not bbox_wgs84 or len(bbox_wgs84) != 4:
         raise ValueError("bbox_wgs84 must be a 4-tuple (min_lon, min_lat, max_lon, max_lat) in WGS84 degrees.")
@@ -293,7 +304,7 @@ def _fetch_from_osm_v06_cdn(
             x1 = min_lon + (ix + 1) * step_x
             y0 = min_lat + iy * step_y
             y1 = min_lat + (iy + 1) * step_y
-            url = (
+            url = _validate_http_url(
                 "https://api.openstreetmap.org/api/0.6/map.json"
                 f"?bbox={x0:.7f},{y0:.7f},{x1:.7f},{y1:.7f}"
             )
@@ -304,7 +315,7 @@ def _fetch_from_osm_v06_cdn(
                     "Accept": "application/json",
                 },
             )
-            with urllib.request.urlopen(req, timeout=req_timeout) as resp:
+            with urllib.request.urlopen(req, timeout=req_timeout) as resp:  # nosec B310
                 raw_bytes = resp.read()
                 tile_data = json.loads(raw_bytes.decode("utf-8"))
                 all_elements.extend(tile_data.get("elements", []))
@@ -330,6 +341,9 @@ def fetch_osm_network(
     """
     mode = _normalize_mode(network_mode)
     clamped_bbox = _validate_and_clamp_bbox(bbox_wgs84)
+    custom_ep_clean = ""
+    if custom_endpoint and str(custom_endpoint).strip():
+        custom_ep_clean = _validate_http_url(str(custom_endpoint).strip())
     query = build_overpass_highway_query(
         clamped_bbox, network_mode=mode, timeout_s=timeout_s
     )
@@ -339,7 +353,7 @@ def fetch_osm_network(
     endpoint_used = ""
 
     # Tier 1: If no custom Overpass server is forced, try Fastly CDN Official OSM API v0.6 first
-    if not (custom_endpoint and str(custom_endpoint).strip()):
+    if not custom_ep_clean:
         try:
             cdn_payload = _fetch_from_osm_v06_cdn(clamped_bbox, timeout_s=timeout_s)
             if cdn_payload is not None:
@@ -351,8 +365,8 @@ def fetch_osm_network(
     # Tier 2: Overpass API endpoints (or custom endpoint when specified)
     if payload is None:
         endpoints: List[str] = []
-        if custom_endpoint and str(custom_endpoint).strip():
-            endpoints.append(str(custom_endpoint).strip())
+        if custom_ep_clean:
+            endpoints.append(custom_ep_clean)
         for ep in OVERPASS_ENDPOINTS:
             if ep not in endpoints:
                 endpoints.append(ep)
@@ -370,8 +384,9 @@ def fetch_osm_network(
 
         for ep in endpoints:
             try:
+                ep_url = _validate_http_url(ep)
                 if is_real_urlopen:
-                    parsed_ep = urllib.parse.urlparse(ep)
+                    parsed_ep = urllib.parse.urlparse(ep_url)
                     if parsed_ep.hostname:
                         port = parsed_ep.port or (
                             443 if parsed_ep.scheme == "https" else 80
@@ -381,14 +396,14 @@ def fetch_osm_network(
                         )
                         sock.close()
                 req = urllib.request.Request(
-                    ep,
+                    ep_url,
                     data=post_body,
                     headers=headers,
                 )
-                with urllib.request.urlopen(req, timeout=per_ep_timeout) as resp:
+                with urllib.request.urlopen(req, timeout=per_ep_timeout) as resp:  # nosec B310
                     raw_bytes = resp.read()
                     payload = json.loads(raw_bytes.decode("utf-8"))
-                    endpoint_used = ep
+                    endpoint_used = ep_url
                     break
             except Exception as exc:
                 last_error = exc

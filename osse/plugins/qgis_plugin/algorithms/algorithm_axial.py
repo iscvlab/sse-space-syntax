@@ -102,7 +102,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
                 "Input Axial Lines Layer",
-                [QgsProcessing.TypeVectorLine]
+                [QgsProcessing.SourceType.TypeVectorLine]
             )
         )
         self.addParameter(
@@ -144,14 +144,14 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
                 "Analyzed Axial Map",
-                type=QgsProcessing.TypeVectorLine
+                type=QgsProcessing.SourceType.TypeVectorLine
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_CSV,
                 "Detailed Attribute Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -160,7 +160,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_SUMMARY_CSV,
                 "Summary & Intelligibility R² Diagnostics Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -245,7 +245,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
             self.OUTPUT,
             context,
             fields,
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
             out_crs
         )
 
@@ -276,7 +276,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
                     self.OUTPUT_CSV,
                     context,
                     fields,
-                    QgsWkbTypes.NoGeometry,
+                    QgsWkbTypes.Type.NoGeometry,
                     QgsCoordinateReferenceSystem()
                 )
 
@@ -295,12 +295,12 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
                 feat = QgsFeature(fields)
                 feat.setGeometry(qgs_geom)
                 feat.setAttributes(attrs)
-                sink.addFeature(feat, QgsFeatureSink.FastInsert)
+                sink.addFeature(feat, QgsFeatureSink.Flag.FastInsert)
 
             if table_sink is not None:
                 t_feat = QgsFeature(fields)
                 t_feat.setAttributes(attrs)
-                table_sink.addFeature(t_feat, QgsFeatureSink.FastInsert)
+                table_sink.addFeature(t_feat, QgsFeatureSink.Flag.FastInsert)
 
         # Optional Summary & Intelligibility R² Diagnostics Table Layer Sink
         sum_dest_id = None
@@ -315,7 +315,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_SUMMARY_CSV,
                 context,
                 sum_fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem()
             )
             if sum_sink is not None:
@@ -337,7 +337,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
                         s_vals = [col, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
                     sf = QgsFeature(sum_fields)
                     sf.setAttributes(s_vals)
-                    sum_sink.addFeature(sf, QgsFeatureSink.FastInsert)
+                    sum_sink.addFeature(sf, QgsFeatureSink.Flag.FastInsert)
 
                 r2_feat = QgsFeature(sum_fields)
                 r2_val = round(float(intelligibility_r2), 4)
@@ -345,7 +345,7 @@ class SSEAxialAlgorithm(QgsProcessingAlgorithm):
                     "intelligibility_r2 (Connectivity vs Integration_HH)",
                     r2_val, r2_val, r2_val, 0.0, 0.0, 0.0, 0.0
                 ])
-                sum_sink.addFeature(r2_feat, QgsFeatureSink.FastInsert)
+                sum_sink.addFeature(r2_feat, QgsFeatureSink.Flag.FastInsert)
 
         style_attr = ""
         for cand in ("Int_HH_Rn", "Integration_HH_", "ax_integration_rn"):

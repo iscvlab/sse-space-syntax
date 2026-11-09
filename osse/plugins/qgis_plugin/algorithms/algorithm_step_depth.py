@@ -121,21 +121,21 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
                 "Input Street Network Layer",
-                [QgsProcessing.TypeVectorLine]
+                [QgsProcessing.SourceType.TypeVectorLine]
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.ORIGIN_LAYER,
                 "Origin Points or Lines Layer (Optional — overrides Origin IDs)",
-                [QgsProcessing.TypeVectorAnyGeometry],
+                [QgsProcessing.SourceType.TypeVectorAnyGeometry],
                 optional=True
             )
         )
         param_origin_pts = QgsProcessingParameterFeatureSource(
             self.ORIGIN_POINTS,
             "Origin Points Layer (Script Alias for ORIGIN_LAYER)",
-            [QgsProcessing.TypeVectorAnyGeometry],
+            [QgsProcessing.SourceType.TypeVectorAnyGeometry],
             optional=True
         )
         try:
@@ -160,7 +160,7 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.ORIGIN_SNAP_TOLERANCE,
                 "Origin Layer Snap Tolerance (meters)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=50.0,
                 minValue=0.1,
                 maxValue=5000.0
@@ -170,7 +170,7 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.MAX_RADIUS,
                 "Maximum Search Horizon (0 = Unlimited Global)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0.0,
                 minValue=0.0
             )
@@ -210,7 +210,7 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.SNAP_TOLERANCE,
                 "Network Endpoint Snap Tolerance (meters) [Clean Network]",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=1.5,
                 minValue=0.0,
                 maxValue=50.0,
@@ -243,14 +243,14 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
                 "Step Depth Segment Network",
-                type=QgsProcessing.TypeVectorLine
+                type=QgsProcessing.SourceType.TypeVectorLine
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_CSV,
                 "Detailed Step Depth Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -484,7 +484,7 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
             self.OUTPUT,
             context,
             fields,
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
             out_crs
         )
 
@@ -496,7 +496,7 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_CSV,
                 context,
                 fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem()
             )
 
@@ -531,11 +531,11 @@ class SSEStepDepthAlgorithm(QgsProcessingAlgorithm):
                 feat = QgsFeature(fields)
                 feat.setGeometry(qgs_geom)
                 feat.setAttributes(attrs)
-                sink.addFeature(feat, QgsFeatureSink.FastInsert)
+                sink.addFeature(feat, QgsFeatureSink.Flag.FastInsert)
             if table_sink is not None:
                 t_feat = QgsFeature(fields)
                 t_feat.setAttributes(attrs)
-                table_sink.addFeature(t_feat, QgsFeatureSink.FastInsert)
+                table_sink.addFeature(t_feat, QgsFeatureSink.Flag.FastInsert)
 
         if r_type_str == "metric":
             style_attr = (

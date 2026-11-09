@@ -137,7 +137,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.INPUT,
                 "Input Street Network Layer",
-                [QgsProcessing.TypeVectorLine]
+                [QgsProcessing.SourceType.TypeVectorLine]
             )
         )
         self.addParameter(
@@ -188,7 +188,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
                 self.WEIGHT_FIELD,
                 "Custom Weight Attribute Field [Custom Weight Mode]",
                 parentLayerParameterName=self.INPUT,
-                type=QgsProcessingParameterField.Numeric,
+                type=QgsProcessingParameterField.DataType.Numeric,
                 optional=True
             )
         )
@@ -222,7 +222,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.DEAD_END_STUB_LEN,
                 "Remove Dead-End Stubs Shorter Than (meters, 0 = disabled)",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0.0,
                 minValue=0.0,
                 maxValue=500.0
@@ -245,7 +245,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.EXTEND_DISTANCE,
                 "Manual Extension Distance (meters) [Manual Mode]",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=15.0,
                 minValue=1.0,
                 maxValue=50.0
@@ -262,7 +262,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.SNAP_TOLERANCE,
                 "Legacy Watertight Snapping Distance (meters) [Legacy Mode]",
-                type=QgsProcessingParameterNumber.Double,
+                type=QgsProcessingParameterNumber.Type.Double,
                 defaultValue=3.0,
                 minValue=0.0,
                 maxValue=50.0
@@ -307,14 +307,14 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
                 "Analyzed Segment Network",
-                type=QgsProcessing.TypeVectorLine
+                type=QgsProcessing.SourceType.TypeVectorLine
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_CSV,
                 "Detailed Segment Attribute Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -323,7 +323,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT_SUMMARY_CSV,
                 "Network Summary & Intelligibility / Synergy R² Diagnostics Table",
-                type=QgsProcessing.TypeVector,
+                type=QgsProcessing.SourceType.TypeVector,
                 optional=True,
                 createByDefault=True
             )
@@ -633,7 +633,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
             self.OUTPUT,
             context,
             fields,
-            QgsWkbTypes.LineString,
+            QgsWkbTypes.Type.LineString,
             out_crs
         )
 
@@ -645,7 +645,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_CSV,
                 context,
                 fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem()
             )
 
@@ -672,12 +672,12 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
                 feat = QgsFeature(fields)
                 feat.setGeometry(qgs_geom)
                 feat.setAttributes(attrs)
-                sink.addFeature(feat, QgsFeatureSink.FastInsert)
+                sink.addFeature(feat, QgsFeatureSink.Flag.FastInsert)
 
             if table_sink is not None:
                 t_feat = QgsFeature(fields)
                 t_feat.setAttributes(attrs)
-                table_sink.addFeature(t_feat, QgsFeatureSink.FastInsert)
+                table_sink.addFeature(t_feat, QgsFeatureSink.Flag.FastInsert)
 
             if i % 10000 == 0:
                 feedback.setProgress(85 + int((i / max(n_segs, 1)) * 15.0))
@@ -693,7 +693,7 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
                 self.OUTPUT_SUMMARY_CSV,
                 context,
                 sum_fields,
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.Type.NoGeometry,
                 QgsCoordinateReferenceSystem()
             )
             if sum_sink is not None:
@@ -704,17 +704,17 @@ class SSEASAAlgorithm(QgsProcessingAlgorithm):
                         float(st["min"]), float(st["max"]), float(st["mean"]),
                         float(st["std"]), float(st["p10"]), float(st["p50"]), float(st["p90"])
                     ])
-                    sum_sink.addFeature(sf, QgsFeatureSink.FastInsert)
+                    sum_sink.addFeature(sf, QgsFeatureSink.Flag.FastInsert)
                 for r2_key in ("intelligibility_r2", "intelligibility_integration_r2"):
                     r2_v = float(diag.get(r2_key, 0.0))
                     sf = QgsFeature(sum_fields)
                     sf.setAttributes([r2_key, r2_v, r2_v, r2_v, 0.0, 0.0, 0.0, 0.0])
-                    sum_sink.addFeature(sf, QgsFeatureSink.FastInsert)
+                    sum_sink.addFeature(sf, QgsFeatureSink.Flag.FastInsert)
                 for r_lbl, syn_v in (diag.get("synergy_r2") or {}).items():
                     sv = float(syn_v)
                     sf = QgsFeature(sum_fields)
                     sf.setAttributes([f"synergy_{r_lbl}_r2", sv, sv, sv, 0.0, 0.0, 0.0, 0.0])
-                    sum_sink.addFeature(sf, QgsFeatureSink.FastInsert)
+                    sum_sink.addFeature(sf, QgsFeatureSink.Flag.FastInsert)
 
         style_attr = ""
         if "NACH_Rn" in asa_results:
